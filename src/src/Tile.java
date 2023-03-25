@@ -1,6 +1,15 @@
+import java.awt.Graphics2D;
+
 public class Tile {
-    private int        value;
-    private TileStatus tileStatus = TileStatus.UNSET;
+    private final int  xPos;
+    private final int  yPos;
+    private       int        value;
+    private       TileStatus tileStatus = TileStatus.UNSET;
+
+    public Tile( final int xCord, final int yCord ) {
+        xPos = xCord * Constants.TILE_SIZE;
+        yPos = yCord * Constants.TILE_SIZE;
+    }
 
     public boolean setFinalValue( final int finalValue ) {
         if ( tileStatus == TileStatus.SET_FINAL ) {
@@ -35,4 +44,8 @@ public class Tile {
         return -1;
     }
 
+    public void repaint( final Graphics2D graphics2D ) {
+        graphics2D.setColor( Colors.EGGSHELL );
+        graphics2D.fillRect( xPos, yPos, Constants.TILE_SIZE, Constants.TILE_SIZE );
+    }
 }

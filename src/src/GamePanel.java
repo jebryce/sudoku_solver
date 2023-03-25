@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
     private       Thread        gameThread;
+    private       Tile[][]      tiles      = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
 
     public GamePanel() {
         this.setPreferredSize( new Dimension( Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT ) );
@@ -27,6 +28,8 @@ public class GamePanel extends JPanel implements Runnable {
         long       lastFPSTime        = 0;
         long       numFrames          = 0;
         double     FPS;
+
+        genTiles();
 
         // main game loop
         while ( gameThread != null) {
@@ -55,10 +58,29 @@ public class GamePanel extends JPanel implements Runnable {
     protected void paintComponent ( final Graphics graphics ) {
         super.paintComponent( graphics );
         Graphics2D graphics2D = (Graphics2D) graphics;
+
+        repaintTiles( graphics2D );
+
         graphics2D.dispose();
+    }
+
+    private void repaintTiles( final Graphics2D graphics2D ) {
+        for (int i = 0; i < Constants.NUM_TILES; i++ ){
+            for (int j = 0; j < Constants.NUM_TILES; j++ ) {
+                tiles[i][j].repaint( graphics2D );
+            }
+        }
     }
 
     private void update() {
 
+    }
+
+    private void genTiles() {
+        for (int i = 0; i < Constants.NUM_TILES; i++ ){
+            for (int j = 0; j < Constants.NUM_TILES; j++ ) {
+                tiles[i][j] = new Tile( i, j );
+            }
+        }
     }
 }
