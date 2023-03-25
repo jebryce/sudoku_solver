@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements Runnable {
     private       Thread        gameThread;
     private final Tile[][]      tiles      = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
+    private final KeyHandler    keyHandler = new KeyHandler();
 
     public GamePanel() {
         this.setPreferredSize( new Dimension( Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT ) );
@@ -56,6 +57,7 @@ public class GamePanel extends JPanel implements Runnable {
     protected void paintComponent ( final Graphics graphics ) {
         super.paintComponent( graphics );
         Graphics2D graphics2D = (Graphics2D) graphics;
+        graphics2D.setFont( new Font( null, Font.PLAIN, Constants.TEXT_SIZE ) );
 
         repaintTiles( graphics2D );
 
