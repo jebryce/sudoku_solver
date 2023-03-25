@@ -41,8 +41,7 @@ public class Tile {
         return 0;
     }
 
-    public void repaint( final Graphics2D graphics2D ) {
-        graphics2D.setColor( Colors.EGGSHELL );
+    public void repaintBackground( final Graphics2D graphics2D ) {
         graphics2D.fillRect( xPos, yPos, Constants.TILE_SIZE, Constants.TILE_SIZE );
     }
 
