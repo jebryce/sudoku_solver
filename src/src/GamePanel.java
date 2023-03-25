@@ -3,7 +3,6 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Color;
 
 import javax.swing.JPanel;
 
@@ -12,7 +11,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     public GamePanel() {
         this.setPreferredSize( new Dimension( Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT ) );
-        this.setBackground( Color.BLACK );
+        this.setBackground( Colors.BLACK );
         this.setDoubleBuffered( true );
         //this.addKeyListener( keyH );
         this.setFocusTraversalKeysEnabled( false ); // can receive tab inputs
