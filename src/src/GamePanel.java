@@ -33,6 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
         long       numFrames          = 0;
         double     FPS;
 
+
+
         // main game loop
         while ( gameThread != null) {
             currentTime = System.nanoTime();

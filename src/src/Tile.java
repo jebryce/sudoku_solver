@@ -53,7 +53,7 @@ public class Tile {
             graphics2D.setColor( Colors.CHARCOAL_GRAY );
         }
         else if ( tileStatus == TileStatus.SET_FINAL) {
-            graphics2D.setColor( Colors.CHARCOAL_BLACK );
+            graphics2D.setColor( Colors.BLACK );
         }
 
         graphics2D.drawString(

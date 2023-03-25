@@ -82,8 +82,6 @@ public class Tiles {
                 else {
                     graphics2D.setColor ( Colors.EGGSHELL );
                 }
-
-
                 tiles[i][j].repaintBackground( graphics2D );
             }
         }
@@ -98,7 +96,7 @@ public class Tiles {
     }
 
     public void drawGrid( final Graphics2D graphics2D ) {
-        graphics2D.setColor( Colors.CHARCOAL_GRAY);
+        graphics2D.setColor( Colors.CHARCOAL );
         int offset = Constants.TILE_SIZE;
         for (int i = 1; i < Constants.NUM_TILES; i++ ){
             if ( i % 3 == 0 ) {
