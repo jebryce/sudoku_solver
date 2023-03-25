@@ -47,23 +47,22 @@ public class Tile {
     }
 
     public void repaintText( final Graphics2D graphics2D ) {
-        if ( tileStatus != TileStatus.UNSET ) {
+        if ( tileStatus == TileStatus.UNSET ) {
+            return;
+        }
+        else if ( tileStatus == TileStatus.SET ) {
             graphics2D.setColor( Colors.CHARCOAL_GRAY );
-            graphics2D.drawString(
-                    String.valueOf(value),
-                    xPos + Constants.TILE_TEXT_X_OFFSET,
-                    yPos + Constants.TILE_TEXT_Y_OFFSET
-            );
         }
-        if ( tileStatus == TileStatus.SET_FINAL ) {
+        else if ( tileStatus == TileStatus.SET_FINAL) {
             graphics2D.setColor( Colors.CORAL_PINK );
-            graphics2D.fillRect(
-                    xPos + 3*Constants.TILE_SIZE/4,
-                    yPos,
-                    Constants.TILE_SIZE/4,
-                    Constants.TILE_SIZE/4
-            );
         }
+
+        graphics2D.drawString(
+                String.valueOf(value),
+                xPos + Constants.TILE_TEXT_X_OFFSET,
+                yPos + Constants.TILE_TEXT_Y_OFFSET
+        );
+
     }
 
     private boolean valueIsInvalid( final int newValue ) {
