@@ -1,8 +1,8 @@
 import java.awt.Graphics2D;
 
 public class Tile {
-    private final int  xPos;
-    private final int  yPos;
+    private final int        xPos;
+    private final int        yPos;
     private       int        value;
     private       TileStatus tileStatus = TileStatus.UNSET;
 
@@ -11,22 +11,20 @@ public class Tile {
         yPos = yCord * Constants.TILE_SIZE;
     }
 
-    public boolean setFinalValue( final int finalValue ) {
-        if ( tileStatus == TileStatus.SET_FINAL ) {
-            return false;
+    public void setFinalValue( final int finalValue ) {
+        if ( valueIsInvalid( finalValue ) ) {
+            return;
         }
         value = finalValue;
         tileStatus = TileStatus.SET_FINAL;
-        return true;
     }
 
-    public boolean setValue( final int newValue ) {
-        if ( tileStatus == TileStatus.SET_FINAL ) {
-            return false;
+    public void setValue( final int newValue ) {
+        if ( valueIsInvalid( newValue ) ) {
+            return;
         }
         value = newValue;
         tileStatus = TileStatus.SET;
-        return true;
     }
 
     public boolean clearValue() {
@@ -47,5 +45,26 @@ public class Tile {
     public void repaint( final Graphics2D graphics2D ) {
         graphics2D.setColor( Colors.EGGSHELL );
         graphics2D.fillRect( xPos, yPos, Constants.TILE_SIZE, Constants.TILE_SIZE );
+        if ( tileStatus != TileStatus.UNSET ) {
+            graphics2D.setColor( Colors.CHARCOAL_GRAY );
+            graphics2D.drawString(
+                    String.valueOf(value),
+                    xPos + Constants.TILE_TEXT_X_OFFSET,
+                    yPos + Constants.TILE_TEXT_Y_OFFSET
+            );
+        }
+    }
+
+    private boolean valueIsInvalid( final int newValue ) {
+        if ( tileStatus == TileStatus.SET_FINAL ) {
+            return true;
+        }
+        if ( newValue < 0 ) {
+            return true;
+        }
+        if ( newValue > 9 ) {
+            return true;
+        }
+        return false;
     }
 }
