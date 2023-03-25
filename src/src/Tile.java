@@ -55,6 +55,15 @@ public class Tile {
                     yPos + Constants.TILE_TEXT_Y_OFFSET
             );
         }
+        if ( tileStatus == TileStatus.SET_FINAL ) {
+            graphics2D.setColor( Colors.CORAL_PINK );
+            graphics2D.fillRect(
+                    xPos + 3*Constants.TILE_SIZE/4,
+                    yPos,
+                    Constants.TILE_SIZE/4,
+                    Constants.TILE_SIZE/4
+            );
+        }
     }
 
     private boolean valueIsInvalid( final int newValue ) {

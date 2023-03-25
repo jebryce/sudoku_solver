@@ -3,7 +3,7 @@ import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
     public boolean[] numbersPressed   = new boolean[Constants.NUM_VALUES];
-    public boolean   backspacePressed;
+    public boolean   spacePressed;
 
     @Override
     public void keyTyped( KeyEvent event ) {}
@@ -14,8 +14,8 @@ public class KeyHandler implements KeyListener {
         if ( code >= KeyEvent.VK_1 && code <= KeyEvent.VK_9 ) {
             numbersPressed[code - KeyEvent.VK_0] = true;
         }
-        if ( code == KeyEvent.VK_BACK_SPACE ) {
-            backspacePressed = true;
+        if ( code == KeyEvent.VK_SPACE ) {
+            spacePressed = true;
         }
     }
 

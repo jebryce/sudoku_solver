@@ -112,9 +112,9 @@ public class GamePanel extends JPanel implements Runnable {
                 keyHandler.numbersPressed[i] = false;
             }
         }
-        if ( keyHandler.backspacePressed ) {
+        if ( keyHandler.spacePressed ) {
             tiles[xCord][yCord].clearValue();
-            keyHandler.backspacePressed = false;
+            keyHandler.spacePressed = false;
         }
     }
 
@@ -124,5 +124,13 @@ public class GamePanel extends JPanel implements Runnable {
                 tiles[i][j] = new Tile( i, j );
             }
         }
+
+
+
+
+
+
+
+
     }
 }
