@@ -1,14 +1,12 @@
 
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
     private       Thread        gameThread;
-    private       Tile[][]      tiles      = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
+    private final Tile[][]      tiles      = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
 
     public GamePanel() {
         this.setPreferredSize( new Dimension( Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT ) );
@@ -61,6 +59,8 @@ public class GamePanel extends JPanel implements Runnable {
 
         repaintTiles( graphics2D );
 
+        drawGrid( graphics2D );
+
         graphics2D.dispose();
     }
 
@@ -69,6 +69,21 @@ public class GamePanel extends JPanel implements Runnable {
             for (int j = 0; j < Constants.NUM_TILES; j++ ) {
                 tiles[i][j].repaint( graphics2D );
             }
+        }
+    }
+
+    private void drawGrid( final Graphics2D graphics2D ) {
+        graphics2D.setColor( Colors.CHARCOAL_GRAY);
+        int offset = Constants.TILE_SIZE;
+        for (int i = 1; i < Constants.NUM_TILES; i++ ){
+            if ( i % 3 == 0 ) {
+                graphics2D.setStroke( new BasicStroke( Constants.BOX_BORDER_SIZE  ) );
+            } else {
+                graphics2D.setStroke( new BasicStroke( Constants.CELL_BORDER_SIZE ) );
+            }
+            graphics2D.drawLine( offset, 0, offset, Constants.SCREEN_HEIGHT );
+            graphics2D.drawLine( 0, offset, Constants.SCREEN_WIDTH, offset );
+            offset += Constants.TILE_SIZE;
         }
     }
 
