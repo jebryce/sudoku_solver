@@ -22,8 +22,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        final long updateFPSInterval  = Constants.NANO_SEC_PER_SEC / 5;
+        final long updateFPSInterval  = Constants.NANO_SEC_PER_SEC / 10;
         final long updateGameInterval = Constants.NANO_SEC_PER_SEC / Constants.UPDATES_PER_SECOND;
+        final long repaintInterval    = Constants.NANO_SEC_PER_SEC / Constants.MAX_FPS;
+        long       sleepTime;
+        long       lastRepaintTime    = 0;
         long       lastUpdateTime     = 0;
         long       currentTime;
         long       lastFPSTime        = 0;
@@ -33,7 +36,6 @@ public class GamePanel extends JPanel implements Runnable {
         // main game loop
         while ( gameThread != null) {
             currentTime = System.nanoTime();
-            repaint();
             if ( currentTime - lastUpdateTime > updateGameInterval ) {
                 update();
                 lastUpdateTime = currentTime;
@@ -41,10 +43,22 @@ public class GamePanel extends JPanel implements Runnable {
             if ( currentTime - lastFPSTime > updateFPSInterval ) {
                 FPS = (double) ( numFrames * Constants.NANO_SEC_PER_SEC ) / ( currentTime - lastFPSTime );
                 System.out.format("FPS: [%.1f]\r", FPS);
-                numFrames   = 0;
+                numFrames = 0;
                 lastFPSTime = currentTime;
             }
-            numFrames++;
+            if ( currentTime - lastRepaintTime > repaintInterval ) {
+                repaint();
+                numFrames++;
+                lastRepaintTime = currentTime;
+                sleepTime = repaintInterval - ( System.nanoTime() - currentTime) ;
+                if ( sleepTime > 0 ) {
+                    try {
+                        Thread.sleep(sleepTime / Constants.NANO_SEC_PER_M_SEC);
+                    } catch ( InterruptedException e ) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
         }
 
     }
