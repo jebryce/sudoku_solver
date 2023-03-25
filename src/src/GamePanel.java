@@ -6,15 +6,18 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
     private       Thread        gameThread;
-    private final Tile[][]      tiles      = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
-    private final KeyHandler    keyHandler = new KeyHandler();
+    private final Tile[][]      tiles        = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
+    private final KeyHandler    keyHandler   = new KeyHandler();
+    private final MouseHandler  mouseHandler = new MouseHandler();
+    private final Cursor        cursor       = new Cursor( mouseHandler );
 
     public GamePanel() {
         this.setPreferredSize( new Dimension( Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT ) );
         this.setBackground( Colors.BLACK );
         this.setDoubleBuffered( true );
-        //this.addKeyListener( keyH );
+        this.addKeyListener( keyHandler );
         this.setFocusTraversalKeysEnabled( false ); // can receive tab inputs
+        this.addMouseMotionListener( mouseHandler );
         this.setFocusable( true );
     }
 
@@ -60,6 +63,9 @@ public class GamePanel extends JPanel implements Runnable {
         graphics2D.setFont( new Font( null, Font.PLAIN, Constants.TEXT_SIZE ) );
 
         repaintTiles( graphics2D );
+        cursor.repaint( graphics2D );
+
+        repaintTilesText( graphics2D );
 
         drawGrid( graphics2D );
 
@@ -70,6 +76,14 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < Constants.NUM_TILES; i++ ){
             for (int j = 0; j < Constants.NUM_TILES; j++ ) {
                 tiles[i][j].repaint( graphics2D );
+            }
+        }
+    }
+
+    private void repaintTilesText( final Graphics2D graphics2D ) {
+        for (int i = 0; i < Constants.NUM_TILES; i++ ){
+            for (int j = 0; j < Constants.NUM_TILES; j++ ) {
+                tiles[i][j].repaintText( graphics2D );
             }
         }
     }
@@ -90,7 +104,18 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     private void update() {
-
+        int xCord = mouseHandler.xPos / Constants.TILE_SIZE;
+        int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
+        for( int i = 0; i < Constants.NUM_VALUES; i++ ) {
+            if ( keyHandler.numbersPressed[i] ) {
+                tiles[xCord][yCord].setValue( i );
+                keyHandler.numbersPressed[i] = false;
+            }
+        }
+        if ( keyHandler.backspacePressed ) {
+            tiles[xCord][yCord].clearValue();
+            keyHandler.backspacePressed = false;
+        }
     }
 
     private void genTiles() {

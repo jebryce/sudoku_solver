@@ -10,4 +10,5 @@ public class Constants {
     public static final int  TEXT_SIZE          = TILE_SIZE / 2;
     public static final int  TILE_TEXT_X_OFFSET = TEXT_SIZE / 2;
     public static final int  TILE_TEXT_Y_OFFSET = TILE_SIZE - TILE_TEXT_X_OFFSET;
+    public static final int  NUM_VALUES         = 10;
 }

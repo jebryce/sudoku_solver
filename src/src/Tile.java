@@ -27,24 +27,26 @@ public class Tile {
         tileStatus = TileStatus.SET;
     }
 
-    public boolean clearValue() {
+    public void clearValue() {
         if ( tileStatus == TileStatus.SET_FINAL ) {
-            return false;
+            return;
         }
         tileStatus = TileStatus.UNSET;
-        return true;
     }
 
     public int getValue() {
         if ( tileStatus != TileStatus.UNSET ) {
             return value;
         }
-        return -1;
+        return 0;
     }
 
     public void repaint( final Graphics2D graphics2D ) {
         graphics2D.setColor( Colors.EGGSHELL );
         graphics2D.fillRect( xPos, yPos, Constants.TILE_SIZE, Constants.TILE_SIZE );
+    }
+
+    public void repaintText( final Graphics2D graphics2D ) {
         if ( tileStatus != TileStatus.UNSET ) {
             graphics2D.setColor( Colors.CHARCOAL_GRAY );
             graphics2D.drawString(
@@ -59,7 +61,7 @@ public class Tile {
         if ( tileStatus == TileStatus.SET_FINAL ) {
             return true;
         }
-        if ( newValue < 0 ) {
+        if ( newValue < 1 ) {
             return true;
         }
         if ( newValue > 9 ) {
