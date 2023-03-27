@@ -63,11 +63,14 @@ public class Tiles {
         for( int i = 0; i < Constants.NUM_VALUES; i++ ) {
             if ( keyHandler.numbersPressed[i] ) {
                 tiles[xCord][yCord].setValue( i );
+                if ( isValueDuplicated( xCord, yCord ) ) {
+                    setDuplicated( xCord, yCord );
+                }
                 keyHandler.numbersPressed[i] = false;
             }
         }
         if ( keyHandler.spacePressed || keyHandler.backspacePressed ) {
-            tiles[xCord][yCord].clearValue();
+            clearAndUnsetDuplicated( xCord, yCord );
             keyHandler.spacePressed = false;
             keyHandler.backspacePressed = false;
         }
@@ -116,6 +119,56 @@ public class Tiles {
             graphics2D.drawLine( offset, 0, offset, Constants.SCREEN_HEIGHT );
             graphics2D.drawLine( 0, offset, Constants.SCREEN_WIDTH, offset );
             offset += Constants.TILE_SIZE;
+        }
+    }
+
+    private boolean isValueDuplicated( final int xCord, final int yCord ) {
+        final int value = tiles[xCord][yCord].getValue();
+        int currentBox = xCord / 3 + yCord - (yCord % 3);
+        for ( int y = 0; y < Constants.NUM_TILES; y++ ) {
+            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
+                if ( x == xCord && y == yCord ) {
+                    continue;
+                }
+                if ( x == xCord || y == yCord || boxes[currentBox].isCordInBox( x, y ) ) {
+                    if ( value == tiles[x][y].getValue() ) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private void setDuplicated( final int xCord, final int yCord ) {
+        final int value = tiles[xCord][yCord].getValue();
+        int currentBox = xCord / 3 + yCord - (yCord % 3);
+        for ( int y = 0; y < Constants.NUM_TILES; y++ ) {
+            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
+                if ( x == xCord || y == yCord || boxes[currentBox].isCordInBox( x, y ) ) {
+                    if ( value == tiles[x][y].getValue() ) {
+                        tiles[x][y].setDuplicated();
+                    }
+                }
+            }
+        }
+    }
+
+    private void clearAndUnsetDuplicated( final int xCord, final int yCord ) {
+        final int value = tiles[xCord][yCord].getValue();
+        tiles[xCord][yCord].clearValue();
+        int currentBox = xCord / 3 + yCord - (yCord % 3);
+        for ( int y = 0; y < Constants.NUM_TILES; y++ ) {
+            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
+                if ( x == xCord || y == yCord || boxes[currentBox].isCordInBox( x, y ) ) {
+                    if ( value == tiles[x][y].getValue() ) {
+                        if ( isValueDuplicated( x, y ) ) {
+                            continue;
+                        }
+                        tiles[x][y].unsetDuplicated();
+                    }
+                }
+            }
         }
     }
 }

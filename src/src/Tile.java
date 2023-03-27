@@ -3,7 +3,7 @@ import java.awt.Graphics2D;
 public class Tile {
     private final int        xPos;
     private final int        yPos;
-    private       int        value;
+    private       int        value = 0;
     private       TileStatus tileStatus = TileStatus.UNSET;
 
     public Tile( final int xCord, final int yCord ) {
@@ -31,14 +31,26 @@ public class Tile {
         if ( tileStatus == TileStatus.SET_FINAL ) {
             return;
         }
+        value = 0;
         tileStatus = TileStatus.UNSET;
     }
 
-    public int getValue() {
-        if ( tileStatus != TileStatus.UNSET ) {
-            return value;
+    public void setDuplicated() {
+        if ( tileStatus == TileStatus.SET_FINAL ) {
+            return;
         }
-        return 0;
+        tileStatus = TileStatus.DUPLICATE;
+    }
+
+    public void unsetDuplicated() {
+        if ( tileStatus != TileStatus.DUPLICATE ) {
+            return;
+        }
+        tileStatus = TileStatus.SET;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     public void repaintBackground( final Graphics2D graphics2D ) {
@@ -54,6 +66,9 @@ public class Tile {
         }
         else if ( tileStatus == TileStatus.SET_FINAL) {
             graphics2D.setColor( Colors.BLACK );
+        }
+        else if ( tileStatus == TileStatus.DUPLICATE ) {
+            graphics2D.setColor( Colors.CORAL_PINK );
         }
 
         graphics2D.drawString(
