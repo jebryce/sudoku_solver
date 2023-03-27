@@ -21,6 +21,18 @@ public class BoardIO {
         return board;
     }
 
+    public static char[] saveBoard( final int[][] tiles ) {
+        final int total_num_tiles = Constants.NUM_TILES * Constants.NUM_TILES;
+        char newBoardValue;
+        char[] board = new char[total_num_tiles];
+        for ( int i = 0; i < total_num_tiles; i++ ) {
+            newBoardValue  = (char) tiles[i%Constants.NUM_TILES][i/Constants.NUM_TILES];
+            newBoardValue += '0';
+            board[i]       = newBoardValue;
+        }
+        return board;
+    }
+
     public static int[][] boardToInt( final char[] board ) {
         final int total_num_tiles = Constants.NUM_TILES * Constants.NUM_TILES;
         int[][] tiles = new int[Constants.NUM_TILES][Constants.NUM_TILES];

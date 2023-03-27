@@ -3,16 +3,27 @@ public class Solver {
     private final int       maxDepth     = Constants.NUM_TILES * Constants.NUM_TILES;
     private final int[][][] boards       = new int[maxDepth][Constants.NUM_TILES][Constants.NUM_TILES];
     private       int       currentDepth = 0;
+    private       int[][]   solvedBoard;
 
     public Solver( final char[] board ) {
         this.boards[0] = BoardIO.boardToInt( board );
+        long time = System.nanoTime();
         solve();
+        time = System.nanoTime() - time;
+        System.out.println( time + " nanoseconds");
+        System.out.println( (double) time/Constants.NANO_SEC_PER_M_SEC + " milliseconds");
+        System.out.format( "%.6f seconds\n", (double) time/Constants.NANO_SEC_PER_SEC);
+    }
+
+    public char[] getSolvedBoard() {
+        return BoardIO.saveBoard( solvedBoard );
     }
 
     private void solve() {
         // first find the first empty tile
         int tileNum = findFirstEmptyTile();
         if ( tileNum == -1 ) { // if all tiles are filled, then board is solved!
+            solvedBoard = boards[currentDepth];
             return;
         }
         // find a the first value that is placeable on the tile
