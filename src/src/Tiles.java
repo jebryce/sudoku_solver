@@ -77,9 +77,10 @@ public class Tiles {
     }
 
     public void repaintTilesBackground( final Graphics2D graphics2D ) {
-        int xCord      = mouseHandler.xPos / Constants.TILE_SIZE;
-        int yCord      = mouseHandler.yPos / Constants.TILE_SIZE;
-        int currentBox = xCord / 3 + yCord - (yCord % 3);
+        final int xCord = mouseHandler.xPos / Constants.TILE_SIZE;
+        final int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
+        final int box   = xCord / 3 + yCord - (yCord % 3);
+        final int value = tiles[xCord][yCord].getValue();
         for ( int y = 0; y < Constants.NUM_TILES; y++ ){
             for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
                 if ( x == xCord && y == yCord ) {
@@ -88,8 +89,11 @@ public class Tiles {
                 else if ( x == xCord || y == yCord ) {
                     graphics2D.setColor( Colors.SKY_BLUE );
                 }
-                else if ( boxes[currentBox].isCordInBox( x, y ) ) {
+                else if ( boxes[box].isCordInBox( x, y ) ) {
                     graphics2D.setColor( Colors.SKY_BLUE );
+                }
+                else if ( value != 0 && value == tiles[x][y].getValue() ) {
+                    graphics2D.setColor( Colors.SKY_BABY_BLUE );
                 }
                 else {
                     graphics2D.setColor ( Colors.EGGSHELL );

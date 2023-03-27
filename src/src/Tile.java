@@ -70,7 +70,6 @@ public class Tile {
         else if ( tileStatus == TileStatus.DUPLICATE ) {
             graphics2D.setColor( Colors.CORAL_PINK );
         }
-
         graphics2D.drawString(
                 String.valueOf(value),
                 xPos + Constants.TILE_TEXT_X_OFFSET,
