@@ -34,6 +34,9 @@ public class GamePanel extends JPanel implements Runnable {
         double     FPS;
 
         char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+//        char[] board = "001000000000000000000000000000000000000050000000000000000000000000000000000000900".toCharArray();
+        Solver solver = new Solver( board );
+
         Tile[][] loadedTiles = BoardIO.loadBoard( board );
         tiles = new Tiles( keyHandler, mouseHandler, loadedTiles );
 
@@ -46,7 +49,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             if ( currentTime - lastFPSTime > updateFPSInterval ) {
                 FPS = (double) ( numFrames * Constants.NANO_SEC_PER_SEC ) / ( currentTime - lastFPSTime );
-                System.out.format("FPS: [%.1f]\r", FPS);
+                //System.out.format("FPS: [%.1f]\r", FPS);
                 numFrames = 0;
                 lastFPSTime = currentTime;
             }
