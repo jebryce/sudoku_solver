@@ -53,6 +53,10 @@ public class Tile {
         return value;
     }
 
+    public TileStatus getTileStatus() {
+        return tileStatus;
+    }
+
     public void repaintBackground( final Graphics2D graphics2D ) {
         graphics2D.fillRect( xPos, yPos, Constants.TILE_SIZE, Constants.TILE_SIZE );
     }

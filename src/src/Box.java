@@ -3,8 +3,8 @@ public class Box {
     private final int boxYCord; // 0, 1, 2
 
     public Box( final int xCord, final int yCord ) {
-        boxXCord = xCord / 3;
-        boxYCord = yCord / 3;
+        boxXCord = xCord;
+        boxYCord = yCord;
     }
 
     public boolean isCordInBox( final int tileXCord, final int tileYCord ) {

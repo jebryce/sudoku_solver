@@ -8,7 +8,7 @@ public class GamePanel extends JPanel implements Runnable {
     private       Thread        gameThread;
     private final KeyHandler    keyHandler   = new KeyHandler();
     private final MouseHandler  mouseHandler = new MouseHandler();
-    private final Tiles         tiles        = new Tiles( keyHandler, mouseHandler );
+    private       Tiles         tiles;
 
     public GamePanel() {
         this.setPreferredSize( new Dimension( Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT ) );
@@ -33,7 +33,9 @@ public class GamePanel extends JPanel implements Runnable {
         long       numFrames          = 0;
         double     FPS;
 
-
+        char[] board = "A00260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+        Tile[][] loadedTiles = BoardIO.loadBoard( board );
+        tiles = new Tiles( keyHandler, mouseHandler, loadedTiles );
 
         // main game loop
         while ( gameThread != null) {
