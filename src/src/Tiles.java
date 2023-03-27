@@ -66,9 +66,10 @@ public class Tiles {
                 keyHandler.numbersPressed[i] = false;
             }
         }
-        if ( keyHandler.spacePressed ) {
+        if ( keyHandler.spacePressed || keyHandler.backspacePressed ) {
             tiles[xCord][yCord].clearValue();
             keyHandler.spacePressed = false;
+            keyHandler.backspacePressed = false;
         }
     }
 
