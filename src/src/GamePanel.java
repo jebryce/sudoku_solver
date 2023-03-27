@@ -33,7 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
         long       numFrames          = 0;
         double     FPS;
 
-        char[] board = "0002607016800700901900045008201000400046029000500030280A9300A74040050036703018000".toCharArray();
+        char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
         Tile[][] loadedTiles = BoardIO.loadBoard( board );
         tiles = new Tiles( keyHandler, mouseHandler, loadedTiles );
 
