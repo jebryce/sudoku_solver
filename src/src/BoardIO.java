@@ -41,6 +41,45 @@ public class BoardIO {
                 tiles[xCord][yCord].setValue( 0 );
             }
         }
+        setDuplicated( tiles );
         return tiles;
+    }
+
+    private static void setDuplicated( final Tile[][] tiles ) {
+        // loop through board, if tile is set, check if other tiles in row/col/box are duplicated. if so, then set status
+        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
+            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
+                if ( tiles[x][y].getTileStatus() == TileStatus.SET ) {
+                    for ( int col = x; col < Constants.NUM_TILES - 1; col++ ) {
+                        if ( tiles[x][y].getValue() == tiles[col+1][y].getValue() ) {
+                            tiles[x][y].setDuplicated();
+                            tiles[col+1][y].setDuplicated();
+                            break;
+                        }
+                    }
+                    for ( int row = y + 1; row < Constants.NUM_TILES; row++ ) {
+                        if ( tiles[x][y].getValue() == tiles[x][row].getValue() ) {
+                            tiles[x][y].setDuplicated();
+                            tiles[x][row].setDuplicated();
+                            break;
+                        }
+                    }
+                    for ( int boxX = x - x%3; boxX < x - x%3 + 3; boxX++ ) {
+                        for ( int boxY = y - y%3; boxY < y - y%3 + 3; boxY++ ) {
+                            if ( boxX == x || boxY == y ) {
+                                continue;
+                            }
+                            if ( tiles[x][y].getValue() == tiles[boxX][boxY].getValue() ) {
+                                tiles[x][y].setDuplicated();
+                                tiles[boxX][boxY].setDuplicated();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
     }
 }
