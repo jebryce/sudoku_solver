@@ -2,16 +2,20 @@ import java.awt.*;
 
 public class Tiles {
     private final Tile[][]     tiles        = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
+    private final Box[]        boxes        = new Box[Constants.NUM_TILES];
     private final KeyHandler   keyHandler;
     private final MouseHandler mouseHandler;
 
     public Tiles( final KeyHandler keyHandler, final MouseHandler mouseHandler ) {
         this.keyHandler   = keyHandler;
         this.mouseHandler = mouseHandler;
-
-        for (int i = 0; i < Constants.NUM_TILES; i++ ){
-            for (int j = 0; j < Constants.NUM_TILES; j++ ) {
-                tiles[i][j] = new Tile( i, j );
+        int currentBox = 0;
+        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
+            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
+                if ( x % 3 == 0 && y % 3 == 0 ) {
+                    boxes[currentBox++] = new Box( x, y );
+                }
+                tiles[x][y] = new Tile( x, y );
             }
         }
 
@@ -69,28 +73,32 @@ public class Tiles {
     }
 
     public void repaintTilesBackground( final Graphics2D graphics2D ) {
-        int xCord = mouseHandler.xPos / Constants.TILE_SIZE;
-        int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
-        for (int i = 0; i < Constants.NUM_TILES; i++ ){
-            for (int j = 0; j < Constants.NUM_TILES; j++ ) {
-                if ( i == xCord && j == yCord ) {
+        int xCord      = mouseHandler.xPos / Constants.TILE_SIZE;
+        int yCord      = mouseHandler.yPos / Constants.TILE_SIZE;
+        int currentBox = xCord / 3 + yCord - (yCord % 3);
+        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
+            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
+                if ( x == xCord && y == yCord ) {
                     graphics2D.setColor( Colors.BABY_BLUE );
                 }
-                else if ( i == xCord || j == yCord ) {
+                else if ( x == xCord || y == yCord ) {
+                    graphics2D.setColor( Colors.SKY_BLUE );
+                }
+                else if ( boxes[currentBox].isCordInBox( x, y ) ) {
                     graphics2D.setColor( Colors.SKY_BLUE );
                 }
                 else {
                     graphics2D.setColor ( Colors.EGGSHELL );
                 }
-                tiles[i][j].repaintBackground( graphics2D );
+                tiles[x][y].repaintBackground( graphics2D );
             }
         }
     }
 
     public void repaintTilesText( final Graphics2D graphics2D ) {
-        for (int i = 0; i < Constants.NUM_TILES; i++ ){
-            for (int j = 0; j < Constants.NUM_TILES; j++ ) {
-                tiles[i][j].repaintText( graphics2D );
+        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
+            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
+                tiles[x][y].repaintText( graphics2D );
             }
         }
     }
@@ -98,7 +106,7 @@ public class Tiles {
     public void drawGrid( final Graphics2D graphics2D ) {
         graphics2D.setColor( Colors.CHARCOAL );
         int offset = Constants.TILE_SIZE;
-        for (int i = 1; i < Constants.NUM_TILES; i++ ){
+        for ( int i = 1; i < Constants.NUM_TILES; i++ ){
             if ( i % 3 == 0 ) {
                 graphics2D.setStroke( new BasicStroke( Constants.BOX_BORDER_SIZE  ) );
             } else {
