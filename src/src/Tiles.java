@@ -54,14 +54,14 @@ public class Tiles {
                 if ( x == xCord && y == yCord ) {
                     graphics2D.setColor( Colors.BABY_BLUE );
                 }
+                else if ( value != 0 && value == tiles[x][y].getValue() ) {
+                    graphics2D.setColor( Colors.SKY_BABY_BLUE );
+                }
                 else if ( x == xCord || y == yCord ) {
                     graphics2D.setColor( Colors.SKY_BLUE );
                 }
                 else if ( boxes[box].isCordInBox( x, y ) ) {
                     graphics2D.setColor( Colors.SKY_BLUE );
-                }
-                else if ( value != 0 && value == tiles[x][y].getValue() ) {
-                    graphics2D.setColor( Colors.SKY_BABY_BLUE );
                 }
                 else {
                     graphics2D.setColor ( Colors.EGGSHELL );
