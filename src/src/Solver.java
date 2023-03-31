@@ -1,6 +1,7 @@
+
 public class Solver {
     // brute force
-    private final int       maxDepth     = Constants.NUM_TILES * Constants.NUM_TILES;
+    private final int       maxDepth     = Constants.NUM_TILES * Constants.NUM_TILES + 100;
     private final int[][][] boards       = new int[maxDepth][Constants.NUM_TILES][Constants.NUM_TILES];
     private       int       currentDepth = 0;
     private       int[][]   solvedBoard;
@@ -10,6 +11,7 @@ public class Solver {
         long time = System.nanoTime();
         solve();
         time = System.nanoTime() - time;
+        System.out.println();
         System.out.println( time + " nanoseconds");
         System.out.println( (double) time/Constants.NANO_SEC_PER_M_SEC + " milliseconds");
         System.out.format( "%.6f seconds\n", (double) time/Constants.NANO_SEC_PER_SEC);
@@ -22,7 +24,9 @@ public class Solver {
     private void solve() {
         // first find the first empty tile
         int tileNum = findFirstEmptyTile();
+        solvedBoard = boards[currentDepth];
         if ( tileNum == -1 ) { // if all tiles are filled, then board is solved!
+            System.out.println(currentDepth);
             solvedBoard = boards[currentDepth];
             return;
         }
@@ -55,6 +59,7 @@ public class Solver {
             solve();
         }
         if ( valuePlaced ) {
+            System.out.println(currentDepth);
             currentDepth--;
         }
     }

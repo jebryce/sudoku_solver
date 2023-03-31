@@ -30,6 +30,7 @@ public class Tiles {
         int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
         for( int i = 0; i < Constants.NUM_VALUES; i++ ) {
             if ( keyHandler.numbersPressed[i] ) {
+                clearAndUnsetDuplicated( xCord, yCord );
                 tiles[xCord][yCord].setValue( i );
                 if ( isValueDuplicated( xCord, yCord ) ) {
                     setDuplicated( xCord, yCord );
