@@ -30,10 +30,15 @@ public class Tiles {
         int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
         for( int i = 0; i < Constants.NUM_VALUES; i++ ) {
             if ( keyHandler.numbersPressed[i] ) {
-                clearAndUnsetDuplicated( xCord, yCord );
-                tiles[xCord][yCord].setValue( i );
-                if ( isValueDuplicated( xCord, yCord ) ) {
-                    setDuplicated( xCord, yCord );
+                if ( keyHandler.shiftPressed ) {
+                    tiles[xCord][yCord].setNote(i);
+                }
+                else {
+                    clearAndUnsetDuplicated(xCord, yCord);
+                    tiles[xCord][yCord].setValue(i);
+                    if ( isValueDuplicated(xCord, yCord) ) {
+                        setDuplicated(xCord, yCord);
+                    }
                 }
                 keyHandler.numbersPressed[i] = false;
             }
@@ -73,9 +78,19 @@ public class Tiles {
     }
 
     public void repaintTilesText( final Graphics2D graphics2D ) {
+        graphics2D.setFont( new Font( null, Font.PLAIN, Constants.TEXT_SIZE ) );
         for ( int y = 0; y < Constants.NUM_TILES; y++ ){
             for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
                 tiles[x][y].repaintText( graphics2D );
+            }
+        }
+    }
+
+    public void repaintTilesNotes( final Graphics2D graphics2D ) {
+        graphics2D.setFont( new Font( null, Font.PLAIN, Constants.NOTES_TEXT_SIZE ) );
+        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
+            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
+                tiles[x][y].repaintNotes( graphics2D );
             }
         }
     }
@@ -135,7 +150,7 @@ public class Tiles {
 
     private void clearAndUnsetDuplicated( final int xCord, final int yCord ) {
         final int value = tiles[xCord][yCord].getValue();
-        tiles[xCord][yCord].clearValue();
+        tiles[xCord][yCord].clear();
         int currentBox = xCord / 3 + yCord - (yCord % 3);
         for ( int y = 0; y < Constants.NUM_TILES; y++ ) {
             for ( int x = 0; x < Constants.NUM_TILES; x++ ) {

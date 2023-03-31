@@ -11,7 +11,6 @@ public class Solver {
         long time = System.nanoTime();
         solve();
         time = System.nanoTime() - time;
-        System.out.println();
         System.out.println( time + " nanoseconds");
         System.out.println( (double) time/Constants.NANO_SEC_PER_M_SEC + " milliseconds");
         System.out.format( "%.6f seconds\n", (double) time/Constants.NANO_SEC_PER_SEC);
@@ -26,7 +25,6 @@ public class Solver {
         int tileNum = findFirstEmptyTile();
         solvedBoard = boards[currentDepth];
         if ( tileNum == -1 ) { // if all tiles are filled, then board is solved!
-            System.out.println(currentDepth);
             solvedBoard = boards[currentDepth];
             return;
         }
@@ -59,7 +57,6 @@ public class Solver {
             solve();
         }
         if ( valuePlaced ) {
-            System.out.println(currentDepth);
             currentDepth--;
         }
     }

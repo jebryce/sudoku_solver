@@ -33,9 +33,9 @@ public class GamePanel extends JPanel implements Runnable {
         long       numFrames          = 0;
         double     FPS;
 
-//        char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+        char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
 //        char[] board = "001000000000000000000000000000000000000050000000000000000000000000000000000000900".toCharArray();
-        char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
+//        char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
         Solver solver = new Solver( board );
         char[] solvedBoard = solver.getSolvedBoard();
         Tile[][] loadedTiles = BoardIO.loadBoard( board );
@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements Runnable {
             }
             if ( currentTime - lastFPSTime > updateFPSInterval ) {
                 FPS = (double) ( numFrames * Constants.NANO_SEC_PER_SEC ) / ( currentTime - lastFPSTime );
-//                System.out.format("FPS: [%.1f]\r", FPS);
+                System.out.format("FPS: [%.1f]\r", FPS);
                 numFrames = 0;
                 lastFPSTime = currentTime;
             }
@@ -79,11 +79,12 @@ public class GamePanel extends JPanel implements Runnable {
     protected void paintComponent ( final Graphics graphics ) {
         super.paintComponent( graphics );
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.setFont( new Font( null, Font.PLAIN, Constants.TEXT_SIZE ) );
 
         tiles.repaintTilesBackground( graphics2D );
 
         tiles.repaintTilesText( graphics2D );
+
+        tiles.repaintTilesNotes( graphics2D );
 
         tiles.drawGrid( graphics2D );
 
