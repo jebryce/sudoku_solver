@@ -2,7 +2,6 @@ import java.awt.*;
 
 public class Tiles {
     private final Tile[][]     tiles;
-    private final Box[]        boxes        = new Box[Constants.NUM_TILES];
     private final KeyHandler   keyHandler;
     private final MouseHandler mouseHandler;
 
@@ -10,19 +9,52 @@ public class Tiles {
         this.keyHandler   = keyHandler;
         this.mouseHandler = mouseHandler;
         tiles             = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
-        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
-            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
-                tiles[x][y] = new Tile( x, y );
-            }
+        int x,y;
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            x = tileNum % Constants.NUM_TILES;
+            y = tileNum / Constants.NUM_TILES;
+            tiles[x][y] = new Tile(x, y);
         }
-        genBoxes();
+        setVisibleTiles();
     }
 
     public Tiles( final KeyHandler keyHandler, final MouseHandler mouseHandler, final Tile[][] tiles ) {
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
         this.tiles = tiles;
-        genBoxes();
+        setVisibleTiles();
+    }
+
+    private void setVisibleTiles() {
+        int xCord, yCord;
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            xCord = tileNum % Constants.NUM_TILES;
+            yCord = tileNum / Constants.NUM_TILES;
+
+            // tiles in the row / col
+            for ( int i = 0; i < Constants.NUM_TILES; i++ ) {
+                // tiles in the same column
+                if ( i != xCord ) {
+                    tiles[xCord][yCord].setVisibleTile( tiles[i][yCord] );
+                }
+                // tiles in the same row
+                if ( i != yCord ) {
+                    tiles[xCord][yCord].setVisibleTile( tiles[xCord][i] );
+                }
+
+            }
+
+            // tiles in the rest of the box
+            final int baseY = yCord - yCord % 3;
+            final int baseX = xCord - xCord % 3;
+            int testY, testX;
+            for ( int i = 0; i < 4; i++ ) {
+                testY = ( i / 2 + yCord + 1 ) % 3 + baseY;
+                testX = ( i % 2 + xCord + 1 ) % 3 + baseX;
+                tiles[xCord][yCord].setVisibleTile( tiles[testX][testY] );
+            }
+
+        }
     }
 
     public void update() {
@@ -34,17 +66,13 @@ public class Tiles {
                     tiles[xCord][yCord].setNote(i);
                 }
                 else {
-                    clearAndUnsetDuplicated(xCord, yCord);
                     tiles[xCord][yCord].setValue(i);
-                    if ( isValueDuplicated(xCord, yCord) ) {
-                        setDuplicated(xCord, yCord);
-                    }
                 }
                 keyHandler.numbersPressed[i] = false;
             }
         }
         if ( keyHandler.spacePressed || keyHandler.backspacePressed ) {
-            clearAndUnsetDuplicated( xCord, yCord );
+            tiles[xCord][yCord].clear();
             keyHandler.spacePressed = false;
             keyHandler.backspacePressed = false;
         }
@@ -53,45 +81,45 @@ public class Tiles {
     public void repaintTilesBackground( final Graphics2D graphics2D ) {
         final int xCord = mouseHandler.xPos / Constants.TILE_SIZE;
         final int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
-        final int box   = xCord / 3 + yCord - (yCord % 3);
         final int value = tiles[xCord][yCord].getValue();
-        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
-            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
-                if ( x == xCord && y == yCord ) {
-                    graphics2D.setColor( Colors.BABY_BLUE );
-                }
-                else if ( value != 0 && value == tiles[x][y].getValue() ) {
-                    graphics2D.setColor( Colors.SKY_BABY_BLUE );
-                }
-                else if ( x == xCord || y == yCord ) {
-                    graphics2D.setColor( Colors.SKY_BLUE );
-                }
-                else if ( boxes[box].isCordInBox( x, y ) ) {
-                    graphics2D.setColor( Colors.SKY_BLUE );
-                }
-                else {
-                    graphics2D.setColor ( Colors.EGGSHELL );
-                }
-                tiles[x][y].repaintBackground( graphics2D );
+        int x,y;
+
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            x = tileNum % Constants.NUM_TILES;
+            y = tileNum / Constants.NUM_TILES;
+            if ( x == xCord && y == yCord ) {
+                graphics2D.setColor( Colors.BABY_BLUE );
             }
+            else if ( value != 0 && value == tiles[x][y].getValue() ) {
+                graphics2D.setColor( Colors.SKY_BABY_BLUE );
+            }
+            else if ( tiles[xCord][yCord].isTileVisible( tiles[x][y] ) ) {
+                graphics2D.setColor( Colors.SKY_BLUE );
+            }
+            else {
+                graphics2D.setColor( Colors.EGGSHELL );
+            }
+            tiles[x][y].repaintBackground( graphics2D );
         }
     }
 
     public void repaintTilesText( final Graphics2D graphics2D ) {
         graphics2D.setFont( new Font( null, Font.PLAIN, Constants.TEXT_SIZE ) );
-        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
-            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
-                tiles[x][y].repaintText( graphics2D );
-            }
+        int x,y;
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            x = tileNum % Constants.NUM_TILES;
+            y = tileNum / Constants.NUM_TILES;
+            tiles[x][y].repaintText( graphics2D );
         }
     }
 
     public void repaintTilesNotes( final Graphics2D graphics2D ) {
         graphics2D.setFont( new Font( null, Font.PLAIN, Constants.NOTES_TEXT_SIZE ) );
-        for ( int y = 0; y < Constants.NUM_TILES; y++ ){
-            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
-                tiles[x][y].repaintNotes( graphics2D );
-            }
+        int x,y;
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            x = tileNum % Constants.NUM_TILES;
+            y = tileNum / Constants.NUM_TILES;
+            tiles[x][y].repaintNotes( graphics2D );
         }
     }
 
@@ -107,62 +135,6 @@ public class Tiles {
             graphics2D.drawLine( offset, 0, offset, Constants.SCREEN_HEIGHT );
             graphics2D.drawLine( 0, offset, Constants.SCREEN_WIDTH, offset );
             offset += Constants.TILE_SIZE;
-        }
-    }
-
-    private void genBoxes() {
-        for ( int box = 0; box < Constants.NUM_TILES; box++ ) {
-            boxes[box] = new Box( box % 3, box / 3 );
-        }
-    }
-
-    private boolean isValueDuplicated( final int xCord, final int yCord ) {
-        final int value = tiles[xCord][yCord].getValue();
-        int currentBox = xCord / 3 + yCord - (yCord % 3);
-        for ( int y = 0; y < Constants.NUM_TILES; y++ ) {
-            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
-                if ( x == xCord && y == yCord ) {
-                    continue;
-                }
-                if ( x == xCord || y == yCord || boxes[currentBox].isCordInBox( x, y ) ) {
-                    if ( value == tiles[x][y].getValue() ) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private void setDuplicated( final int xCord, final int yCord ) {
-        final int value = tiles[xCord][yCord].getValue();
-        int currentBox = xCord / 3 + yCord - (yCord % 3);
-        for ( int y = 0; y < Constants.NUM_TILES; y++ ) {
-            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
-                if ( x == xCord || y == yCord || boxes[currentBox].isCordInBox( x, y ) ) {
-                    if ( value == tiles[x][y].getValue() ) {
-                        tiles[x][y].setDuplicated();
-                    }
-                }
-            }
-        }
-    }
-
-    private void clearAndUnsetDuplicated( final int xCord, final int yCord ) {
-        final int value = tiles[xCord][yCord].getValue();
-        tiles[xCord][yCord].clear();
-        int currentBox = xCord / 3 + yCord - (yCord % 3);
-        for ( int y = 0; y < Constants.NUM_TILES; y++ ) {
-            for ( int x = 0; x < Constants.NUM_TILES; x++ ) {
-                if ( x == xCord || y == yCord || boxes[currentBox].isCordInBox( x, y ) ) {
-                    if ( value == tiles[x][y].getValue() ) {
-                        if ( isValueDuplicated( x, y ) ) {
-                            continue;
-                        }
-                        tiles[x][y].unsetDuplicated();
-                    }
-                }
-            }
         }
     }
 }

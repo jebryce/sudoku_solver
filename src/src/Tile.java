@@ -19,14 +19,17 @@ public class Tile {
         }
         value = finalValue;
         tileStatus = TileStatus.SET_FINAL;
+        setVisibleDuplicates();
     }
 
     public void setValue( final int newValue ) {
         if ( valueIsInvalid( newValue ) ) {
             return;
         }
+        clear();
         value = newValue;
         tileStatus = TileStatus.SET;
+        setVisibleDuplicates();
     }
 
     public void clear() {
@@ -38,20 +41,7 @@ public class Tile {
         }
         value = 0;
         tileStatus = TileStatus.UNSET;
-    }
-
-    public void setDuplicated() {
-        if ( tileStatus == TileStatus.SET_FINAL ) {
-            return;
-        }
-        tileStatus = TileStatus.DUPLICATE;
-    }
-
-    public void unsetDuplicated() {
-        if ( tileStatus != TileStatus.DUPLICATE ) {
-            return;
-        }
-        tileStatus = TileStatus.SET;
+        clearVisibleDuplicates();
     }
 
     public void setNote( final int newNote ) {
@@ -120,6 +110,56 @@ public class Tile {
             if ( visibleTiles[i] == null ) {
                 visibleTiles[i] = newTile;
                 return;
+            }
+        }
+    }
+
+    public boolean isTileVisible( final Tile tile ) {
+        for ( Tile visibleTile : visibleTiles ) {
+            if ( visibleTile == null ) {
+                return false;
+            }
+            if ( tile == visibleTile ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void setDuplicated() {
+        if ( tileStatus == TileStatus.SET_FINAL ) {
+            return;
+        }
+        tileStatus = TileStatus.DUPLICATE;
+    }
+
+    public void unsetDuplicated() {
+        if ( tileStatus != TileStatus.DUPLICATE ) {
+            return;
+        }
+        tileStatus = TileStatus.SET;
+    }
+
+    private void setVisibleDuplicates() {
+        unsetDuplicated();
+        for ( Tile visibleTile : visibleTiles ) {
+            if ( visibleTile == null ) {
+                return;
+            }
+            if ( visibleTile.getValue() == value ) {
+                visibleTile.setDuplicated();
+                setDuplicated();
+            }
+        }
+    }
+
+    private void clearVisibleDuplicates() {
+        for ( Tile visibleTile : visibleTiles ) {
+            if ( visibleTile == null ) {
+                return;
+            }
+            if ( visibleTile.getTileStatus() == TileStatus.DUPLICATE ) {
+                visibleTile.setVisibleDuplicates();
             }
         }
     }
