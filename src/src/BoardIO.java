@@ -21,27 +21,6 @@ public class BoardIO {
         return board;
     }
 
-    public static int[][] boardToInt( final char[] board ) {
-        final int total_num_tiles = Constants.NUM_TILES * Constants.NUM_TILES;
-        int[][] tiles = new int[Constants.NUM_TILES][Constants.NUM_TILES];
-        int xCord;
-        int yCord;
-        for ( int i = 0; i < total_num_tiles; i++ ) {
-            xCord = i % Constants.NUM_TILES;
-            yCord = i / Constants.NUM_TILES;
-            if ( board[i] >= '1' && board[i] <= '9' ) {
-                tiles[xCord][yCord] = board[i] - '0';
-            }
-            else if ( board[i] >= 'A' && board[i] <= 'I' ) {
-                tiles[xCord][yCord] = board[i] - 'A' + 1;
-            }
-            else {
-                tiles[xCord][yCord] = 0;
-            }
-        }
-        return tiles;
-    }
-
     // 000260701680070090190004500820100040004602900050003028009300074040050036703018000
     public static Tile[][] loadBoard( final char[] board ) {
         final int total_num_tiles = Constants.NUM_TILES * Constants.NUM_TILES;

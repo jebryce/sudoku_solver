@@ -2,8 +2,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-    public boolean[] numbersPressed   = new boolean[Constants.NUM_VALUES];
-    public boolean   spacePressed, backspacePressed, shiftPressed;
+    public boolean[] numbersPressed = new boolean[Constants.NUM_VALUES];
+    public boolean   spacePressed, backspacePressed, shiftPressed, enterPressed;
 
     @Override
     public void keyTyped( KeyEvent event ) {}
@@ -22,6 +22,9 @@ public class KeyHandler implements KeyListener {
         }
         if ( code == KeyEvent.VK_SHIFT ) {
             shiftPressed = true;
+        }
+        if ( code == KeyEvent.VK_ENTER ) {
+            enterPressed = true;
         }
     }
 

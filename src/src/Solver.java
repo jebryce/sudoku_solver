@@ -1,32 +1,30 @@
 
 public class Solver {
     // brute force
-    private final int       NOT_FOUND = -1;
-    private final int       maxDepth       = Constants.NUM_TILES * (Constants.NUM_TILES + 1);
-    private final int[][][] boards         = new int[maxDepth][Constants.NUM_TILES][Constants.NUM_TILES];
-    private       int       currentDepth   = 0;
-    private       int[][]   solvedBoard;
+    private final int     NOT_FOUND = -1;
+    private final int[][] tiles;
 
     public Solver( final char[] board ) {
-        this.boards[0] = BoardIO.boardToInt( board );
+        this.tiles = loadBoard( board );
     }
 
     public char[] step() {
-        int[][] currentBoard = boards[currentDepth];
         // first find the first empty tile
-        final int tileNum = findFirstEmptyTile( currentBoard );
+        final int tileNum = findFirstEmptyTile();
 
+        // then, if there is an empty tile, try to find a placeable value
         if ( tileNum != NOT_FOUND ) {
-            final int value = findPlaceableValue( currentBoard, tileNum );
+            final int value = findPlaceableValue( tileNum );
+            // if there is a placeable value, place it!
             if ( value != NOT_FOUND ) {
-                currentBoard = duplicateTiles();
-                placeAValue( currentBoard, value, tileNum );
+                placeAValue( value, tileNum );
             }
         }
-        return saveBoard( boards[currentDepth] );
+
+        return saveBoard();
     }
 
-    private int findFirstEmptyTile( final int[][] tiles) {
+    private int findFirstEmptyTile() {
         final int EMPTY_TILE = 0;
         int x, y;
         for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
@@ -39,9 +37,9 @@ public class Solver {
         return NOT_FOUND;
     }
 
-    private int findPlaceableValue( final int[][] tiles, final int tileNum ) {
+    private int findPlaceableValue( final int tileNum ) {
         for ( int value = 1; value <= Constants.NUM_TILES; value++ ) {
-            if ( isValueTaken( tiles, value, tileNum ) ) {
+            if ( isValueTaken( value, tileNum ) ) {
                 continue;
             }
             return value;
@@ -49,7 +47,7 @@ public class Solver {
         return NOT_FOUND;
     }
 
-    private boolean isValueTaken( final int[][] tiles, final int value, final int tileNum ) {
+    private boolean isValueTaken( final int value, final int tileNum ) {
         final int xCord = tileNum % Constants.NUM_TILES;
         final int yCord = tileNum / Constants.NUM_TILES;
 
@@ -79,33 +77,41 @@ public class Solver {
         return false;
     }
 
-    private void placeAValue( final int[][] tiles, final int value, final int tileNum ) {
+    private void placeAValue( final int value, final int tileNum ) {
         final int xCord = tileNum % Constants.NUM_TILES;
         final int yCord = tileNum / Constants.NUM_TILES;
         tiles[xCord][yCord] = value;
     }
 
-    private int[][] duplicateTiles() {
-        int xCord, yCord;
-        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
-            xCord = i % Constants.NUM_TILES;
-            yCord = i / Constants.NUM_TILES;
-            boards[currentDepth + 1][xCord][yCord] = boards[currentDepth][xCord][yCord];
-        }
-        currentDepth++;
-        return boards[currentDepth];
-    }
-
-    private char[] saveBoard( final int[][] tiles ) {
-        final int total_num_tiles = Constants.NUM_TILES * Constants.NUM_TILES;
+    private char[] saveBoard() {
         char newBoardValue;
-        char[] board = new char[total_num_tiles];
-        for ( int i = 0; i < total_num_tiles; i++ ) {
+        char[] board = new char[Constants.TOTAL_TILES];
+        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
             newBoardValue  = (char) tiles[i%Constants.NUM_TILES][i/Constants.NUM_TILES];
             newBoardValue += '0';
             board[i]       = newBoardValue;
         }
         return board;
+    }
+
+    private int[][] loadBoard( final char[] board ) {
+        int[][] tiles = new int[Constants.NUM_TILES][Constants.NUM_TILES];
+        int xCord;
+        int yCord;
+        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
+            xCord = i % Constants.NUM_TILES;
+            yCord = i / Constants.NUM_TILES;
+            if ( board[i] >= '1' && board[i] <= '9' ) {
+                tiles[xCord][yCord] = board[i] - '0';
+            }
+            else if ( board[i] >= 'A' && board[i] <= 'I' ) {
+                tiles[xCord][yCord] = board[i] - 'A' + 1;
+            }
+            else {
+                tiles[xCord][yCord] = 0;
+            }
+        }
+        return tiles;
     }
 }
 
