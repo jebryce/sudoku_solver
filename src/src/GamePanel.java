@@ -9,6 +9,7 @@ public class GamePanel extends JPanel implements Runnable {
 //    private char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
     private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
 //    private char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
+//    private char[] board = "12345678000000000I000000000000000000000000000000000000000000000000000000000000000".toCharArray();
     private       Thread        gameThread;
     private final KeyHandler    keyHandler   = new KeyHandler();
     private final MouseHandler  mouseHandler = new MouseHandler();

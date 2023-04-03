@@ -5,6 +5,8 @@ public class KeyHandler implements KeyListener {
     public boolean[] numbersPressed = new boolean[Constants.NUM_VALUES];
     public boolean   spacePressed, backspacePressed, shiftPressed, enterPressed;
 
+    public boolean   solveBoard;
+
     @Override
     public void keyTyped( KeyEvent event ) {}
 
@@ -26,6 +28,8 @@ public class KeyHandler implements KeyListener {
         if ( code == KeyEvent.VK_ENTER ) {
             enterPressed = true;
         }
+
+        checkKeyBinds();
     }
 
     @Override
@@ -34,5 +38,9 @@ public class KeyHandler implements KeyListener {
         if ( code == KeyEvent.VK_SHIFT ) {
             shiftPressed = false;
         }
+    }
+
+    private void checkKeyBinds() {
+        solveBoard = shiftPressed && enterPressed;
     }
 }

@@ -10,6 +10,16 @@ public class Solver {
         loadFinal( board );
     }
 
+    public char[] solve() {
+        long time = System.nanoTime();
+        do {
+            step();
+        } while ( findFirstEmptyTile() != NOT_FOUND );
+        time = System.nanoTime() - time;
+        System.out.println( "The solver took " + time + " nanoseconds." );
+        return saveBoard();
+    }
+
     public char[] step() {
         // first find the first empty tile
         int tileNum = findFirstEmptyTile();
@@ -39,18 +49,20 @@ public class Solver {
             tileNum = findLastChangeableTile();
         } while ( tileNum != NOT_FOUND );
 
-        System.out.println("Unsolvable board!");
+        // most of the time if you reach here the board is unsolvable.
+        // there is an edge case, but I am deciding not to worry about it right now
+        // try board: "12345678000000000I000000000000000000000000000000000000000000000000000000000000000" to showcase it
         return saveBoard();
     }
 
     private int findFirstEmptyTile() {
-        int x, y;
+        int xCord, yCord;
         for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
-            x = i % Constants.NUM_TILES;
-            y = i / Constants.NUM_TILES;
+            xCord = i % Constants.NUM_TILES;
+            yCord = i / Constants.NUM_TILES;
             // brute force
             int EMPTY_TILE = 0;
-            if ( tiles[x][y] == EMPTY_TILE ) {
+            if ( tiles[xCord][yCord] == EMPTY_TILE ) {
                 return i;
             }
         }
