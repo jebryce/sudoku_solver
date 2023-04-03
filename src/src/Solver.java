@@ -1,6 +1,5 @@
 
 public class Solver {
-    // brute force
     private final int         NOT_FOUND  = -1;
     private final int[][]     tiles      = new int[Constants.NUM_TILES][Constants.NUM_TILES];
     private final boolean[][] finalTiles = new boolean[Constants.NUM_TILES][Constants.NUM_TILES];
@@ -19,7 +18,7 @@ public class Solver {
             return saveBoard();
         }
 
-        final int value = findPlaceableValue( tileNum );
+        int value = findPlaceableValue( tileNum );
 
         // if there is a placeable value, place it!
         if ( value != NOT_FOUND ) {
@@ -30,17 +29,27 @@ public class Solver {
         // if the board isn't empty, but you can't place a new number,
         // find the last value that you can change
         tileNum = findLastChangeableTile();
-        System.out.println(tileNum);
+
+        value = findPlaceableValue( tileNum );
+
+        if ( value != NOT_FOUND ) {
+            placeAValue( value, tileNum );
+            return saveBoard();
+        }
+        else {
+            System.out.println( value );
+        }
 
         return saveBoard();
     }
 
     private int findFirstEmptyTile() {
-        final int EMPTY_TILE = 0;
         int x, y;
         for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
             x = i % Constants.NUM_TILES;
             y = i / Constants.NUM_TILES;
+            // brute force
+            int EMPTY_TILE = 0;
             if ( tiles[x][y] == EMPTY_TILE ) {
                 return i;
             }
@@ -48,8 +57,18 @@ public class Solver {
         return NOT_FOUND;
     }
 
-    private int findPlaceableValue( final int tileNum ) {
-        for ( int value = 1; value <= Constants.NUM_TILES; value++ ) {
+    private int findPlaceableValue( final int tileNum  ) {
+        int x = tileNum % Constants.NUM_TILES;
+        int y = tileNum / Constants.NUM_TILES;
+
+        // if this method is called on a blank tile, value = 0,
+        // then the first iteration of the while loop checks for the value of 1
+        //
+        // if this method is called on a filled tile - that needs replacing,
+        // then the first iteration of the while loop checks for the filled tile's value +1
+        int value = tiles[x][y];
+        while ( value < Constants.NUM_TILES ) {
+            value++;
             if ( isValueTaken( value, tileNum ) ) {
                 continue;
             }
