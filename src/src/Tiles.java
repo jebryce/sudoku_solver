@@ -74,7 +74,10 @@ public class Tiles {
             if ( x == xCord && y == yCord ) {
                 graphics2D.setColor( Colors.BABY_BLUE );
             }
-            else if ( value != 0 && value == tiles[x][y].getValue() ) {
+            else if ( value != 0 && tiles[x][y].getValue() == value ) {
+                graphics2D.setColor( Colors.SKY_BABY_BLUE );
+            }
+            else if ( tiles[x][y].isValueInNotes( value ) ) {
                 graphics2D.setColor( Colors.SKY_BABY_BLUE );
             }
             else if ( tiles[xCord][yCord].isTileVisible( tiles[x][y] ) ) {

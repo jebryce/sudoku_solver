@@ -140,6 +140,16 @@ public class Tile {
         tileStatus = TileStatus.SET;
     }
 
+    public boolean isValueInNotes( final int value ) {
+        if ( value == 0 ) {
+            return false;
+        }
+        if ( tileStatus == TileStatus.UNSET ) {
+            return notes[value-1];
+        }
+        return false;
+    }
+
     protected void setVisibleDuplicates() {
         if ( tileStatus == TileStatus.UNSET ) {
             return;
