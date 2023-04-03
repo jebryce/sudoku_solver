@@ -140,7 +140,7 @@ public class Tile {
         tileStatus = TileStatus.SET;
     }
 
-    private void setVisibleDuplicates() {
+    protected void setVisibleDuplicates() {
         unsetDuplicated();
         for ( Tile visibleTile : visibleTiles ) {
             if ( visibleTile == null ) {

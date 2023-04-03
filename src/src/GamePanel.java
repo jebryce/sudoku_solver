@@ -5,10 +5,16 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
+
+    char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+//    char[] board = "001000000000000000000000000000000000000050000000000000000000000000000000000000900".toCharArray();
+//    char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
     private       Thread        gameThread;
     private final KeyHandler    keyHandler   = new KeyHandler();
     private final MouseHandler  mouseHandler = new MouseHandler();
-    private       Tiles         tiles        = new Tiles( keyHandler, mouseHandler );
+    private final Tiles         tiles        = new Tiles( keyHandler, mouseHandler, board );
+    private final Solver        solver       = new Solver( board );
+
 
     public GamePanel() {
         this.setPreferredSize( new Dimension( Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT ) );
@@ -32,12 +38,6 @@ public class GamePanel extends JPanel implements Runnable {
         long       lastFPSTime        = 0;
         long       numFrames          = 0;
         double     FPS;
-
-//        char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
-//        char[] board = "001000000000000000000000000000000000000050000000000000000000000000000000000000900".toCharArray();
-        char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
-        Tile[][] loadedTiles = BoardIO.loadBoard( board );
-        tiles = new Tiles( keyHandler, mouseHandler, loadedTiles );
 
         // main game loop
         while ( gameThread != null) {
@@ -91,5 +91,10 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void update() {
         tiles.update();
+        if ( keyHandler.enterPressed ) {
+            keyHandler.enterPressed = false;
+            solver.step();
+
+        }
     }
 }

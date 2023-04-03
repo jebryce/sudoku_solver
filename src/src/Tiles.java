@@ -1,28 +1,14 @@
 import java.awt.*;
 
 public class Tiles {
-    private final Tile[][]     tiles;
+    private final Tile[][]     tiles = new Tile[Constants.TOTAL_TILES][Constants.TOTAL_TILES];
     private final KeyHandler   keyHandler;
     private final MouseHandler mouseHandler;
 
-    public Tiles( final KeyHandler keyHandler, final MouseHandler mouseHandler ) {
-        this.keyHandler   = keyHandler;
-        this.mouseHandler = mouseHandler;
-        tiles             = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
-        int x,y;
-        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
-            x = tileNum % Constants.NUM_TILES;
-            y = tileNum / Constants.NUM_TILES;
-            tiles[x][y] = new Tile(x, y);
-        }
-        setVisibleTiles();
-    }
-
-    public Tiles( final KeyHandler keyHandler, final MouseHandler mouseHandler, final Tile[][] tiles ) {
+    public Tiles( final KeyHandler keyHandler, final MouseHandler mouseHandler, final char[] board ) {
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
-        this.tiles = tiles;
-        setVisibleTiles();
+        loadBoard( board );
     }
 
     private void setVisibleTiles() {
@@ -135,6 +121,37 @@ public class Tiles {
             graphics2D.drawLine( offset, 0, offset, Constants.SCREEN_HEIGHT );
             graphics2D.drawLine( 0, offset, Constants.SCREEN_WIDTH, offset );
             offset += Constants.TILE_SIZE;
+        }
+    }
+
+    private void loadBoard( final char[] board ) {
+        int xCord;
+        int yCord;
+        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
+            xCord = i % Constants.NUM_TILES;
+            yCord = i / Constants.NUM_TILES;
+            tiles[xCord][yCord] = new Tile( xCord, yCord );
+            if ( board[i] >= '1' && board[i] <= '9' ) {
+                tiles[xCord][yCord].setFinalValue( board[i] - '0' );
+            }
+            else if ( board[i] >= 'A' && board[i] <= 'I' ) {
+                tiles[xCord][yCord].setValue( board[i] - 'A' + 1 );
+            }
+            else {
+                tiles[xCord][yCord].setValue( 0 );
+            }
+        }
+        setVisibleTiles();
+        setDuplicated();
+    }
+
+    private void setDuplicated() {
+        int xCord;
+        int yCord;
+        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
+            xCord = i % Constants.NUM_TILES;
+            yCord = i / Constants.NUM_TILES;
+            tiles[xCord][yCord].setVisibleDuplicates();
         }
     }
 }
