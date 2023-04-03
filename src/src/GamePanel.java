@@ -6,9 +6,8 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
-//    char[] board = "001000000000000000000000000000000000000050000000000000000000000000000000000000900".toCharArray();
-//    char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
+    private char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+//    private char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
     private       Thread        gameThread;
     private final KeyHandler    keyHandler   = new KeyHandler();
     private final MouseHandler  mouseHandler = new MouseHandler();
@@ -93,8 +92,8 @@ public class GamePanel extends JPanel implements Runnable {
         tiles.update();
         if ( keyHandler.enterPressed ) {
             keyHandler.enterPressed = false;
-            solver.step();
-
+            board = solver.step();
+            tiles.loadBoard( board );
         }
     }
 }

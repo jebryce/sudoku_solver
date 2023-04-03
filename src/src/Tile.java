@@ -141,6 +141,9 @@ public class Tile {
     }
 
     protected void setVisibleDuplicates() {
+        if ( tileStatus == TileStatus.UNSET ) {
+            return;
+        }
         unsetDuplicated();
         for ( Tile visibleTile : visibleTiles ) {
             if ( visibleTile == null ) {

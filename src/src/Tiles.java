@@ -124,7 +124,7 @@ public class Tiles {
         }
     }
 
-    private void loadBoard( final char[] board ) {
+    public void loadBoard( final char[] board ) {
         int xCord;
         int yCord;
         for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
