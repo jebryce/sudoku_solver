@@ -43,19 +43,16 @@ public class Solver {
         do {
             value = findPlaceableValue( tileNum );
 
-            // if no values are possible, erase the tile
+            // if no values are possible, erase the tile then find the last changeable tile
             if ( value == NOT_FOUND ) {
                 eraseTile( tileNum );
+                tileNum = findLastChangeableTile();
             }
             // else if there is a placeable value, place it!
             else {
                 placeAValue( value, tileNum );
                 return saveBoard();
             }
-
-            // if the board isn't empty, but you can't place a new number,
-            // find the last value that you can change
-            tileNum = findLastChangeableTile();
         } while ( tileNum != NOT_FOUND );
 
         // most of the time if you reach here the board is unsolvable.
