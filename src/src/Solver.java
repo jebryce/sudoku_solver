@@ -164,7 +164,7 @@ public class Solver {
             xCord = i % Constants.NUM_TILES;
             yCord = i / Constants.NUM_TILES;
             newBoardValue  = (char) tiles[xCord][yCord];
-            if ( finalTiles[xCord][yCord] ) {
+            if ( finalTiles[xCord][yCord] || newBoardValue == 0 ) {
                 newBoardValue += '0';
             }
             else {
