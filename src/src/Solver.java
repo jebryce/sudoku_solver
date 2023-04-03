@@ -12,16 +12,25 @@ public class Solver {
 
     public char[] step() {
         // first find the first empty tile
-        final int tileNum = findFirstEmptyTile();
+        int tileNum = findFirstEmptyTile();
 
-        // then, if there is an empty tile, try to find a placeable value
-        if ( tileNum != NOT_FOUND ) {
-            final int value = findPlaceableValue( tileNum );
-            // if there is a placeable value, place it!
-            if ( value != NOT_FOUND ) {
-                placeAValue( value, tileNum );
-            }
+        // if there isn't an empty tile, the board is full, and (hopefully) it is solved!
+        if ( tileNum == NOT_FOUND ) {
+            return saveBoard();
         }
+
+        final int value = findPlaceableValue( tileNum );
+
+        // if there is a placeable value, place it!
+        if ( value != NOT_FOUND ) {
+            placeAValue( value, tileNum );
+            return saveBoard();
+        }
+
+        // if the board isn't empty, but you can't place a new number,
+        // find the last value that you can change
+        tileNum = findLastChangeableTile();
+        System.out.println(tileNum);
 
         return saveBoard();
     }
@@ -83,6 +92,24 @@ public class Solver {
         final int xCord = tileNum % Constants.NUM_TILES;
         final int yCord = tileNum / Constants.NUM_TILES;
         tiles[xCord][yCord] = value;
+    }
+
+    private int findLastChangeableTile() {
+        final int EMPTY_TILE = 0;
+        int x, y;
+        for ( int i = Constants.TOTAL_TILES - 1; i >= 0; i-- ) {
+            x = i % Constants.NUM_TILES;
+            y = i / Constants.NUM_TILES;
+            if ( tiles[x][y] == EMPTY_TILE ) {
+                continue;
+            }
+            if ( finalTiles[x][y] ) {
+                continue;
+            }
+            // if the tile isn't empty or final
+            return i;
+        }
+        return NOT_FOUND;
     }
 
     private char[] saveBoard() {
