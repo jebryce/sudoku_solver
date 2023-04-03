@@ -5,8 +5,6 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
-//    private char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
-
     // typical sudoku board
 //    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
     // hard sudoku board
@@ -101,10 +99,12 @@ public class GamePanel extends JPanel implements Runnable {
     private void update() {
         tiles.update();
         if ( keyHandler.isSolveBoardPressed() ) {
+            solver.updateBoard( tiles.saveBoard() );
             board = solver.solve();
             tiles.loadBoard( board );
         }
         else if ( keyHandler.isStepSolverPressed() ) {
+            solver.updateBoard( tiles.saveBoard() );
             board = solver.step();
             tiles.loadBoard( board );
         }

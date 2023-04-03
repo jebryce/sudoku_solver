@@ -10,6 +10,11 @@ public class Solver {
         loadFinal( board );
     }
 
+    public void updateBoard( final char[] board ) {
+        loadBoard( board );
+        loadFinal( board );
+    }
+
     public char[] solve() {
         long time = System.nanoTime();
         do {
