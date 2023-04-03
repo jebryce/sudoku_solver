@@ -1,5 +1,6 @@
 
 public class Solver {
+    private final int         EMPTY_TILE = 0;
     private final int         NOT_FOUND  = -1;
     private final int[][]     tiles      = new int[Constants.NUM_TILES][Constants.NUM_TILES];
     private final boolean[][] finalTiles = new boolean[Constants.NUM_TILES][Constants.NUM_TILES];
@@ -15,31 +16,30 @@ public class Solver {
 
         // if there isn't an empty tile, the board is full, and (hopefully) it is solved!
         if ( tileNum == NOT_FOUND ) {
+            System.out.println("Board is solved!");
             return saveBoard();
         }
 
-        int value = findPlaceableValue( tileNum );
+        int value;
+        do {
+            value = findPlaceableValue( tileNum );
 
-        // if there is a placeable value, place it!
-        if ( value != NOT_FOUND ) {
-            placeAValue( value, tileNum );
-            return saveBoard();
-        }
+            // if no values are possible, erase the tile
+            if ( value == NOT_FOUND ) {
+                eraseTile( tileNum );
+            }
+            // else if there is a placeable value, place it!
+            else {
+                placeAValue( value, tileNum );
+                return saveBoard();
+            }
 
-        // if the board isn't empty, but you can't place a new number,
-        // find the last value that you can change
-        tileNum = findLastChangeableTile();
+            // if the board isn't empty, but you can't place a new number,
+            // find the last value that you can change
+            tileNum = findLastChangeableTile();
+        } while ( tileNum != NOT_FOUND );
 
-        value = findPlaceableValue( tileNum );
-
-        if ( value != NOT_FOUND ) {
-            placeAValue( value, tileNum );
-            return saveBoard();
-        }
-        else {
-            System.out.println( value );
-        }
-
+        System.out.println("Unsolvable board!");
         return saveBoard();
     }
 
@@ -114,7 +114,6 @@ public class Solver {
     }
 
     private int findLastChangeableTile() {
-        final int EMPTY_TILE = 0;
         int x, y;
         for ( int i = Constants.TOTAL_TILES - 1; i >= 0; i-- ) {
             x = i % Constants.NUM_TILES;
@@ -129,6 +128,15 @@ public class Solver {
             return i;
         }
         return NOT_FOUND;
+    }
+
+    private void eraseTile( final int tileNum ) {
+        final int xCord = tileNum % Constants.NUM_TILES;
+        final int yCord = tileNum / Constants.NUM_TILES;
+        if ( finalTiles[xCord][yCord] ) {
+            return;
+        }
+        tiles[xCord][yCord] = EMPTY_TILE;
     }
 
     private char[] saveBoard() {
