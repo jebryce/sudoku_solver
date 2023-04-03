@@ -48,7 +48,7 @@ public class Tiles {
         int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
         for( int i = 0; i < Constants.NUM_VALUES; i++ ) {
             if ( keyHandler.numbersPressed[i] ) {
-                if ( keyHandler.shiftPressed ) {
+                if ( keyHandler.isNoteModePressed() ) {
                     tiles[xCord][yCord].setNote(i);
                 }
                 else {
@@ -57,10 +57,8 @@ public class Tiles {
                 keyHandler.numbersPressed[i] = false;
             }
         }
-        if ( keyHandler.spacePressed || keyHandler.backspacePressed ) {
+        if ( keyHandler.isClearTilePressed() ) {
             tiles[xCord][yCord].clear();
-            keyHandler.spacePressed = false;
-            keyHandler.backspacePressed = false;
         }
     }
 

@@ -92,8 +92,11 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void update() {
         tiles.update();
-        if ( keyHandler.enterPressed ) {
-            keyHandler.enterPressed = false;
+        if ( keyHandler.isSolveBoardPressed() ) {
+            board = solver.solve();
+            tiles.loadBoard( board );
+        }
+        else if ( keyHandler.isStepSolverPressed() ) {
             board = solver.step();
             tiles.loadBoard( board );
         }

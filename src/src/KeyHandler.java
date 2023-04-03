@@ -2,10 +2,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-    public boolean[] numbersPressed = new boolean[Constants.NUM_VALUES];
-    public boolean   spacePressed, backspacePressed, shiftPressed, enterPressed;
-
-    public boolean   solveBoard;
+    public  boolean[] numbersPressed = new boolean[Constants.NUM_VALUES];
+    private boolean   spacePressed, backspacePressed, shiftPressed, enterPressed;
+    private boolean   clearTilePressed, noteModePressed, stepSolverPressed, solveBoardPressed;
 
     @Override
     public void keyTyped( KeyEvent event ) {}
@@ -35,12 +34,55 @@ public class KeyHandler implements KeyListener {
     @Override
     public void keyReleased( KeyEvent event ) {
         int code = event.getKeyCode();
+        if ( code == KeyEvent.VK_SPACE ) {
+            spacePressed = false;
+        }
+        if ( code == KeyEvent.VK_BACK_SPACE ) {
+            backspacePressed = false;
+        }
         if ( code == KeyEvent.VK_SHIFT ) {
             shiftPressed = false;
         }
+        if ( code == KeyEvent.VK_ENTER ) {
+            enterPressed = false;
+        }
+
+        checkKeyBinds();
     }
 
+    public boolean isClearTilePressed() {
+        if ( clearTilePressed ) {
+            clearTilePressed = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isNoteModePressed() {
+        return noteModePressed;
+    }
+
+    public boolean isStepSolverPressed() {
+        if ( stepSolverPressed ) {
+            stepSolverPressed = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isSolveBoardPressed() {
+        if ( solveBoardPressed ) {
+            solveBoardPressed = false;
+            return true;
+        }
+        return false;
+    }
+
+
     private void checkKeyBinds() {
-        solveBoard = shiftPressed && enterPressed;
+        clearTilePressed  = spacePressed || backspacePressed;
+        noteModePressed   = shiftPressed;
+        stepSolverPressed = enterPressed;
+        solveBoardPressed = shiftPressed && enterPressed;
     }
 }
