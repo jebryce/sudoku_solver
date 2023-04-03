@@ -14,9 +14,14 @@ public class Solver {
         long time = System.nanoTime();
         do {
             step();
-        } while ( findFirstEmptyTile() != NOT_FOUND );
+        } while ( findFirstEmptyTile() != NOT_FOUND ); // @TODO figure out a way to not get stuck on unsolvable boards
         time = System.nanoTime() - time;
-        System.out.println( "The solver took " + time + " nanoseconds." );
+        System.out.format( "This \"smart\" brute-force solver took: %d nanoseconds,\n", time );
+        System.out.format( "                                   or %.4f milliseconds,\n",
+                (double) time / Constants.NANO_SEC_PER_M_SEC );
+        System.out.format( "                                   or %.4f seconds.\n",
+                (double) time / Constants.NANO_SEC_PER_SEC );
+
         return saveBoard();
     }
 
@@ -26,7 +31,6 @@ public class Solver {
 
         // if there isn't an empty tile, the board is full, and (hopefully) it is solved!
         if ( tileNum == NOT_FOUND ) {
-            System.out.println("Board is solved!");
             return saveBoard();
         }
 

@@ -5,11 +5,19 @@ import java.awt.*;
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
-
 //    private char[] board = "000260701680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
-    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+
+    // typical sudoku board
+//    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+    // hard sudoku board
+    private char[] board = "000009806000001020700300000080000100600050402004000030000000000003407080200103005".toCharArray();
+    // blank sudoku board
 //    private char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
+    // funky edge case sudoku board - not solvable at start, but need to erase a tile to solve
 //    private char[] board = "12345678000000000I000000000000000000000000000000000000000000000000000000000000000".toCharArray();
+    // unsolvable sudoku board
+//    private char[] board = "123456780000000009000000000000000000000000000000000000000000000000000000000000000".toCharArray();
+
     private       Thread        gameThread;
     private final KeyHandler    keyHandler   = new KeyHandler();
     private final MouseHandler  mouseHandler = new MouseHandler();
