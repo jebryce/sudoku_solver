@@ -1,3 +1,5 @@
+package Tiles;
+
 public enum TileStatus {
     UNSET,          // empty tile
     SET,            // user-entered number in tile

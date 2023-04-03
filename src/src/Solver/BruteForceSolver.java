@@ -1,11 +1,14 @@
+package Solver;
 
-public class Solver {
+import Main.Constants;
+
+public class BruteForceSolver {
     private final int         EMPTY_TILE = 0;
     private final int         NOT_FOUND  = -1;
     private final int[][]     tiles      = new int[Constants.NUM_TILES][Constants.NUM_TILES];
     private final boolean[][] finalTiles = new boolean[Constants.NUM_TILES][Constants.NUM_TILES];
 
-    public Solver( final char[] board ) {
+    public BruteForceSolver( final char[] board ) {
         loadBoard( board );
         loadFinal( board );
     }

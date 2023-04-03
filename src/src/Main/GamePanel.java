@@ -1,4 +1,7 @@
+package Main;
 
+import Solver.BruteForceSolver;
+import Tiles.Tiles;
 
 import java.awt.*;
 
@@ -6,9 +9,9 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
     // typical sudoku board
-//    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
     // hard sudoku board
-    private char[] board = "000009806000001020700300000080000100600050402004000030000000000003407080200103005".toCharArray();
+//    private char[] board = "000009806000001020700300000080000100600050402004000030000000000003407080200103005".toCharArray();
     // blank sudoku board
 //    private char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
     // funky edge case sudoku board - not solvable at start, but need to erase a tile to solve
@@ -16,11 +19,11 @@ public class GamePanel extends JPanel implements Runnable {
     // unsolvable sudoku board
 //    private char[] board = "123456780000000009000000000000000000000000000000000000000000000000000000000000000".toCharArray();
 
-    private       Thread        gameThread;
-    private final KeyHandler    keyHandler   = new KeyHandler();
-    private final MouseHandler  mouseHandler = new MouseHandler();
-    private final Tiles         tiles        = new Tiles( keyHandler, mouseHandler, board );
-    private final Solver        solver       = new Solver( board );
+    private       Thread           gameThread;
+    private final KeyHandler       keyHandler       = new KeyHandler();
+    private final MouseHandler     mouseHandler     = new MouseHandler();
+    private final Tiles            tiles            = new Tiles( keyHandler, mouseHandler, board );
+    private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
 
 
     public GamePanel() {
@@ -99,13 +102,13 @@ public class GamePanel extends JPanel implements Runnable {
     private void update() {
         tiles.update();
         if ( keyHandler.isSolveBoardPressed() ) {
-            solver.updateBoard( tiles.saveBoard() );
-            board = solver.solve();
+            bruteForceSolver.updateBoard( tiles.saveBoard() );
+            board = bruteForceSolver.solve();
             tiles.loadBoard( board );
         }
         else if ( keyHandler.isStepSolverPressed() ) {
-            solver.updateBoard( tiles.saveBoard() );
-            board = solver.step();
+            bruteForceSolver.updateBoard( tiles.saveBoard() );
+            board = bruteForceSolver.step();
             tiles.loadBoard( board );
         }
     }

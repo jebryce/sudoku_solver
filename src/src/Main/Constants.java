@@ -1,3 +1,5 @@
+package Main;
+
 public class Constants {
     public static final int   UPDATES_PER_SECOND = 60;
     public static final int   MAX_FPS            = 250;

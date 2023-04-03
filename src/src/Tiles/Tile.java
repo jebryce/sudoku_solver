@@ -1,3 +1,8 @@
+package Tiles;
+
+import Main.Colors;
+import Main.Constants;
+
 import java.awt.Graphics2D;
 
 public class Tile {

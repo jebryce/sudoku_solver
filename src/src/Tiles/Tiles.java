@@ -1,8 +1,15 @@
+package Tiles;
+
+import Main.Colors;
+import Main.Constants;
+import Main.KeyHandler;
+import Main.MouseHandler;
+
 import java.awt.*;
 
 public class Tiles {
     private final Tile[][]     tiles = new Tile[Constants.TOTAL_TILES][Constants.TOTAL_TILES];
-    private final KeyHandler   keyHandler;
+    private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
 
     public Tiles( final KeyHandler keyHandler, final MouseHandler mouseHandler, final char[] board ) {
