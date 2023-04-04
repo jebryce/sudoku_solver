@@ -11,6 +11,7 @@ public class StateControl {
 
     public void setLinkedTiles( final Tiles tiles ) {
         linkedTiles = tiles;
+        tilesHistory[0] = linkedTiles.getTiles();
     }
 
     public void saveState() {
@@ -45,8 +46,11 @@ public class StateControl {
     }
 
     private void shiftHistoryRightOne() {
-        for ( int i = currentDepth++; i > 0; i-- ) {
+        for ( int i = currentDepth; i > 0; i-- ) {
             tilesHistory[i] = tilesHistory[i-1];
+        }
+        if ( currentDepth < maxHistory - 1 ) {
+            currentDepth++;
         }
     }
 }

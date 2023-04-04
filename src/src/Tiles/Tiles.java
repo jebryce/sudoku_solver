@@ -5,7 +5,7 @@ import Main.*;
 import java.awt.*;
 
 public class Tiles {
-    private       Tile[][]     tiles = new Tile[Constants.TOTAL_TILES][Constants.TOTAL_TILES];
+    private       Tile[][]     tiles = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
     private final StateControl stateControl;
@@ -24,29 +24,29 @@ public class Tiles {
 
     public void loadTiles( final Tile[][] tiles ) {
         this.tiles = tiles;
+        setVisibleTiles();
     }
 
     public void update() {
         int xCord = mouseHandler.xPos / Constants.TILE_SIZE;
         int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
+        Tile currentTile = tiles[xCord][yCord];
         for( int i = 0; i < Constants.NUM_VALUES; i++ ) {
             if ( keyHandler.numbersPressed[i] ) {
-                stateControl.saveState();
                 if ( keyHandler.isNoteModePressed() ) {
-                    tiles[xCord][yCord].setNote(i);
+                    stateControl.saveState();
+                    currentTile.setNote(i);
                 }
-                else {
-                    tiles[xCord][yCord].setValue(i);
+                else if ( i != tiles[xCord][yCord].getValue() ) {
+                    stateControl.saveState();
+                    currentTile.setValue(i);
                 }
                 keyHandler.numbersPressed[i] = false;
             }
         }
-        if ( keyHandler.isClearTilePressed() ) {
-            if( tiles[xCord][yCord].isNotEmpty() ) {
-                stateControl.saveState();
-                tiles[xCord][yCord].clear();
-            }
-
+        if ( keyHandler.isClearTilePressed() && currentTile.isNotEmpty()) {
+            stateControl.saveState();
+            currentTile.clear();
         }
     }
 

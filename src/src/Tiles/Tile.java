@@ -11,8 +11,8 @@ public class Tile implements Cloneable {
     private final int        yPos;
     private       int        value        = 0;
     private       TileStatus tileStatus   = TileStatus.UNSET;
-    private final boolean[]  notes        = new boolean[Constants.NUM_TILES];
-    private final Tile[]     visibleTiles = new Tile[Constants.TOTAL_TILES];
+    private       boolean[]  notes        = new boolean[Constants.NUM_TILES];
+    private       Tile[]     visibleTiles = new Tile[Constants.TOTAL_TILES];
 
     public Tile( final int xCord, final int yCord ) {
         xPos = xCord * Constants.TILE_SIZE;
@@ -209,9 +209,9 @@ public class Tile implements Cloneable {
     @Override
     public Tile clone() {
         try {
-            Tile tile = (Tile) super.clone();
-            System.arraycopy(notes, 0, tile.notes, 0, Constants.NUM_TILES);
-            System.arraycopy(visibleTiles, 0, tile.visibleTiles, 0, Constants.TOTAL_TILES);
+            Tile tile         = (Tile) super.clone();
+            tile.notes        = notes.clone();
+            tile.visibleTiles = new Tile[Constants.TOTAL_TILES];
             return tile;
         } catch ( CloneNotSupportedException e ) {
             throw new AssertionError();
