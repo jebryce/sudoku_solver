@@ -8,11 +8,6 @@ public class KeyHandler implements KeyListener {
     private boolean      spacePressed, backspacePressed, shiftPressed, enterPressed, commandPressed, zPressed;
     private boolean      clearTilePressed, noteModePressed, stepSolverPressed, solveBoardPressed, undoPressed;
 
-    private StateControl stateControl;
-
-    public void setStateControl( final StateControl stateControl ) {
-        this.stateControl = stateControl;
-    }
 
     @Override
     public void keyTyped( KeyEvent event ) {}
@@ -80,7 +75,6 @@ public class KeyHandler implements KeyListener {
 
     public boolean isClearTilePressed() {
         if ( clearTilePressed ) {
-            stateControl.saveState();
             clearTilePressed = false;
             return true;
         }
@@ -93,7 +87,6 @@ public class KeyHandler implements KeyListener {
 
     public boolean isStepSolverPressed() {
         if ( stepSolverPressed ) {
-            stateControl.saveState();
             stepSolverPressed = false;
             return true;
         }
@@ -102,7 +95,6 @@ public class KeyHandler implements KeyListener {
 
     public boolean isSolveBoardPressed() {
         if ( solveBoardPressed ) {
-            stateControl.saveState();
             solveBoardPressed = false;
             return true;
         }

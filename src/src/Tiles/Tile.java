@@ -154,6 +154,18 @@ public class Tile implements Cloneable {
         return false;
     }
 
+    public boolean isNotEmpty() {
+        if ( tileStatus != TileStatus.UNSET ) {
+            return true;
+        }
+        for ( boolean note : notes ) {
+            if ( note ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     protected void setVisibleDuplicates() {
         if ( tileStatus == TileStatus.UNSET ) {
             return;
@@ -197,7 +209,10 @@ public class Tile implements Cloneable {
     @Override
     public Tile clone() {
         try {
-            return (Tile) super.clone();
+            Tile tile = (Tile) super.clone();
+            System.arraycopy(notes, 0, tile.notes, 0, Constants.NUM_TILES);
+            System.arraycopy(visibleTiles, 0, tile.visibleTiles, 0, Constants.TOTAL_TILES);
+            return tile;
         } catch ( CloneNotSupportedException e ) {
             throw new AssertionError();
         }

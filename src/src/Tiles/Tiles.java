@@ -1,9 +1,6 @@
 package Tiles;
 
-import Main.Colors;
-import Main.Constants;
-import Main.KeyHandler;
-import Main.MouseHandler;
+import Main.*;
 
 import java.awt.*;
 
@@ -11,10 +8,13 @@ public class Tiles {
     private       Tile[][]     tiles = new Tile[Constants.TOTAL_TILES][Constants.TOTAL_TILES];
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
+    private final StateControl stateControl;
 
-    public Tiles( final KeyHandler keyHandler, final MouseHandler mouseHandler, final char[] board ) {
+    public Tiles( final KeyHandler keyHandler, final MouseHandler mouseHandler, final StateControl stateControl, final char[] board ) {
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
+        this.stateControl = stateControl;
+        stateControl.setLinkedTiles( this );
         loadBoard( board );
     }
 
@@ -31,6 +31,7 @@ public class Tiles {
         int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
         for( int i = 0; i < Constants.NUM_VALUES; i++ ) {
             if ( keyHandler.numbersPressed[i] ) {
+                stateControl.saveState();
                 if ( keyHandler.isNoteModePressed() ) {
                     tiles[xCord][yCord].setNote(i);
                 }
@@ -41,7 +42,11 @@ public class Tiles {
             }
         }
         if ( keyHandler.isClearTilePressed() ) {
-            tiles[xCord][yCord].clear();
+            if( tiles[xCord][yCord].isNotEmpty() ) {
+                stateControl.saveState();
+                tiles[xCord][yCord].clear();
+            }
+
         }
     }
 

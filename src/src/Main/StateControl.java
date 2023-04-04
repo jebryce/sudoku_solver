@@ -7,15 +7,14 @@ public class StateControl {
     private final int        maxHistory    = 100;
     private final Tile[][][] tilesHistory  = new Tile[maxHistory][Constants.NUM_TILES][Constants.NUM_TILES];
     private       int        currentDepth  = 0;
-    private final Tiles      originalTiles;
+    private       Tiles      linkedTiles;
 
-    public StateControl( final Tiles tiles ) {
-        originalTiles = tiles;
-
+    public void setLinkedTiles( final Tiles tiles ) {
+        linkedTiles = tiles;
     }
 
     public void saveState() {
-        Tile[][] tiles = originalTiles.getTiles();
+        Tile[][] tiles = linkedTiles.getTiles();
         Tile[][] newTiles = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
         int xCord, yCord;
         for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
