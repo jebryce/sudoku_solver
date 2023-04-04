@@ -2,7 +2,6 @@ package Main;
 
 import Tiles.Tile;
 import Tiles.Tiles;
-import Tiles.TileStatus;
 
 public class StateControl {
     private final int        maxHistory    = 100;

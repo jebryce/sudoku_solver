@@ -4,6 +4,7 @@ import Main.Colors;
 import Main.Constants;
 
 import java.awt.Graphics2D;
+import java.util.Arrays;
 
 public class Tile implements Cloneable {
     private final int        xPos;
@@ -41,9 +42,7 @@ public class Tile implements Cloneable {
         if ( tileStatus == TileStatus.SET_FINAL ) {
             return;
         }
-        for ( int i = 0; i < Constants.NUM_TILES; i++ ) {
-            notes[i] = false;
-        }
+        Arrays.fill( notes, false );
         value = 0;
         tileStatus = TileStatus.UNSET;
         clearVisibleDuplicates();
