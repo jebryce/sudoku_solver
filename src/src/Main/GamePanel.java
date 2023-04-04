@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final MouseHandler     mouseHandler     = new MouseHandler();
     private final Tiles            tiles            = new Tiles( keyHandler, mouseHandler, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
+    private final StateControl     stateControl     = new StateControl( tiles );
 
 
     public GamePanel() {
@@ -34,6 +35,8 @@ public class GamePanel extends JPanel implements Runnable {
         this.setFocusTraversalKeysEnabled( false ); // can receive tab inputs
         this.addMouseMotionListener( mouseHandler );
         this.setFocusable( true );
+
+        keyHandler.setStateControl( stateControl );
     }
 
     @Override
@@ -110,6 +113,9 @@ public class GamePanel extends JPanel implements Runnable {
             bruteForceSolver.updateBoard( tiles.saveBoard() );
             board = bruteForceSolver.step();
             tiles.loadBoard( board );
+        }
+        if ( keyHandler.isUndoPressed() ) {
+            tiles.loadTiles( stateControl.undo() ) ;
         }
     }
 }

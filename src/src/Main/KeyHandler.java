@@ -4,9 +4,15 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class KeyHandler implements KeyListener {
-    public  boolean[] numbersPressed = new boolean[Constants.NUM_VALUES];
-    private boolean   spacePressed, backspacePressed, shiftPressed, enterPressed;
-    private boolean   clearTilePressed, noteModePressed, stepSolverPressed, solveBoardPressed;
+    public  boolean[]    numbersPressed = new boolean[Constants.NUM_VALUES];
+    private boolean      spacePressed, backspacePressed, shiftPressed, enterPressed, commandPressed, zPressed;
+    private boolean      clearTilePressed, noteModePressed, stepSolverPressed, solveBoardPressed, undoPressed;
+
+    private StateControl stateControl;
+
+    public void setStateControl( final StateControl stateControl ) {
+        this.stateControl = stateControl;
+    }
 
     @Override
     public void keyTyped( KeyEvent event ) {}
@@ -29,6 +35,12 @@ public class KeyHandler implements KeyListener {
         if ( code == KeyEvent.VK_ENTER ) {
             enterPressed = true;
         }
+        if ( code == KeyEvent.VK_META ) { // command key on MAC
+            commandPressed = true;
+        }
+        if ( code == KeyEvent.VK_Z ) {
+            zPressed = true;
+        }
 
         checkKeyBinds();
     }
@@ -48,12 +60,27 @@ public class KeyHandler implements KeyListener {
         if ( code == KeyEvent.VK_ENTER ) {
             enterPressed = false;
         }
+        if ( code == KeyEvent.VK_META ) { // command key on MAC
+            commandPressed = false;
+        }
+        if ( code == KeyEvent.VK_Z ) {
+            zPressed = false;
+        }
 
         checkKeyBinds();
     }
 
+    private void checkKeyBinds() {
+        clearTilePressed  = spacePressed || backspacePressed;
+        noteModePressed   = shiftPressed;
+        stepSolverPressed = enterPressed;
+        solveBoardPressed = shiftPressed && enterPressed;
+        undoPressed       = zPressed     && commandPressed;
+    }
+
     public boolean isClearTilePressed() {
         if ( clearTilePressed ) {
+            stateControl.saveState();
             clearTilePressed = false;
             return true;
         }
@@ -66,6 +93,7 @@ public class KeyHandler implements KeyListener {
 
     public boolean isStepSolverPressed() {
         if ( stepSolverPressed ) {
+            stateControl.saveState();
             stepSolverPressed = false;
             return true;
         }
@@ -74,17 +102,18 @@ public class KeyHandler implements KeyListener {
 
     public boolean isSolveBoardPressed() {
         if ( solveBoardPressed ) {
+            stateControl.saveState();
             solveBoardPressed = false;
             return true;
         }
         return false;
     }
 
-
-    private void checkKeyBinds() {
-        clearTilePressed  = spacePressed || backspacePressed;
-        noteModePressed   = shiftPressed;
-        stepSolverPressed = enterPressed;
-        solveBoardPressed = shiftPressed && enterPressed;
+    public boolean isUndoPressed() {
+        if ( undoPressed ) {
+            undoPressed = false;
+            return true;
+        }
+        return false;
     }
 }

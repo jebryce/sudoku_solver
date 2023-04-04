@@ -5,7 +5,7 @@ import Main.Constants;
 
 import java.awt.Graphics2D;
 
-public class Tile {
+public class Tile implements Cloneable {
     private final int        xPos;
     private final int        yPos;
     private       int        value        = 0;
@@ -193,5 +193,14 @@ public class Tile {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Tile clone() {
+        try {
+            return (Tile) super.clone();
+        } catch ( CloneNotSupportedException e ) {
+            throw new AssertionError();
+        }
     }
 }

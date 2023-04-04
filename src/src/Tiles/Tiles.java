@@ -8,7 +8,7 @@ import Main.MouseHandler;
 import java.awt.*;
 
 public class Tiles {
-    private final Tile[][]     tiles = new Tile[Constants.TOTAL_TILES][Constants.TOTAL_TILES];
+    private       Tile[][]     tiles = new Tile[Constants.TOTAL_TILES][Constants.TOTAL_TILES];
     private final KeyHandler keyHandler;
     private final MouseHandler mouseHandler;
 
@@ -16,6 +16,14 @@ public class Tiles {
         this.keyHandler = keyHandler;
         this.mouseHandler = mouseHandler;
         loadBoard( board );
+    }
+
+    public Tile[][] getTiles() {
+        return tiles;
+    }
+
+    public void loadTiles( final Tile[][] tiles ) {
+        this.tiles = tiles;
     }
 
     public void update() {
