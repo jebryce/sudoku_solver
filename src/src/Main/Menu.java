@@ -14,7 +14,7 @@ public class Menu {
     }
 
     public void update() {
-        if ( keyHandler.isSolveBoardPressed() ) {
+        if ( mouseHandler.isMouseClicked() ) {
             gamePanel.setGameState( GameState.SUDOKU_PLAY );
         }
     }

@@ -36,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener( keyHandler );
         this.setFocusTraversalKeysEnabled( false ); // can receive tab inputs
         this.addMouseMotionListener( mouseHandler );
+        this.addMouseListener( mouseHandler );
         this.setFocusable( true );
     }
 
