@@ -2,7 +2,7 @@ package Tiles;
 
 import Main.Constants;
 
-public class Tiles {
+public class Tiles implements Cloneable {
     private Tile[][] tiles = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
 
 
@@ -10,8 +10,8 @@ public class Tiles {
         return tiles;
     }
 
-    public void loadTiles( final Tile[][] tiles ) {
-        this.tiles = tiles;
+    public void loadTiles( final Tiles tiles ) {
+        this.tiles = tiles.getTiles();
         setVisibleTiles();
     }
 
@@ -96,5 +96,23 @@ public class Tiles {
             board[i] = newBoardValue;
         }
         return board;
+    }
+
+    @Override
+    public Tiles clone() {
+        try {
+            Tiles clone = (Tiles) super.clone();
+            Tile[][] newTiles = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
+            int xCord, yCord;
+            for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+                xCord = tileNum % Constants.NUM_TILES;
+                yCord = tileNum / Constants.NUM_TILES;
+                newTiles[xCord][yCord] = tiles[xCord][yCord].clone();
+            }
+            clone.tiles = newTiles;
+            return clone;
+        } catch ( CloneNotSupportedException e ) {
+            throw new AssertionError();
+        }
     }
 }

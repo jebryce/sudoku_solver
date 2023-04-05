@@ -1,34 +1,25 @@
 package Main;
 
-import Tiles.Tile;
-import Tiles.PaintableTiles;
+import Tiles.Tiles;
 
 public class StateControl {
     private final int        maxHistory    = 100;
-    private final Tile[][][] tilesHistory  = new Tile[maxHistory][Constants.NUM_TILES][Constants.NUM_TILES];
+    private final Tiles[]    tilesHistory  = new Tiles[maxHistory];
     private       int        currentDepth  = 0;
-    private PaintableTiles linkedTiles;
+    private       Tiles      linkedTiles;
 
-    public void setLinkedTiles( final PaintableTiles tiles ) {
+    public void setLinkedTiles( final Tiles tiles ) {
         linkedTiles = tiles;
-        tilesHistory[0] = linkedTiles.getTiles();
+        tilesHistory[0] = linkedTiles;
     }
 
     public void saveState() {
-        Tile[][] tiles = linkedTiles.getTiles();
-        Tile[][] newTiles = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
-        int xCord, yCord;
-        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
-            xCord = tileNum % Constants.NUM_TILES;
-            yCord = tileNum / Constants.NUM_TILES;
-            newTiles[xCord][yCord] = tiles[xCord][yCord].clone();
-        }
         shiftHistoryRightOne();
-        tilesHistory[0] = newTiles;
+        tilesHistory[0] = linkedTiles.clone();
     }
 
-    public Tile[][] undo() {
-        Tile[][] tiles = tilesHistory[0];
+    public Tiles undo() {
+        Tiles tiles = tilesHistory[0];
         if ( currentDepth > 1 ) {
             shiftHistoryLeftOne();
         }
