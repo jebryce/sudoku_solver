@@ -23,8 +23,9 @@ public class GamePanel extends JPanel implements Runnable {
     private final KeyHandler       keyHandler       = new KeyHandler();
     private final MouseHandler     mouseHandler     = new MouseHandler();
     private final StateControl     stateControl     = new StateControl();
-    private final PaintableTiles tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
+    private final PaintableTiles   tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
+    private       GameState        gameState        = GameState.MAIN_MENU;
 
 
     public GamePanel() {
@@ -88,19 +89,34 @@ public class GamePanel extends JPanel implements Runnable {
     protected void paintComponent ( final Graphics graphics ) {
         super.paintComponent( graphics );
         Graphics2D graphics2D = (Graphics2D) graphics;
+        switch ( gameState ) {
+            case MAIN_MENU -> {
 
-        tiles.repaintTilesBackground( graphics2D );
-
-        tiles.repaintTilesText( graphics2D );
-
-        tiles.repaintTilesNotes( graphics2D );
-
-        tiles.drawGrid( graphics2D );
-
+            }
+            case SUDOKU_PLAY -> {
+                tiles.repaintTilesBackground( graphics2D );
+                tiles.repaintTilesText( graphics2D );
+                tiles.repaintTilesNotes( graphics2D );
+                tiles.drawGrid( graphics2D );
+            }
+        }
         graphics2D.dispose();
     }
 
     private void update() {
+        switch ( gameState ) {
+            case MAIN_MENU   -> updateMAIN_MENU();
+            case SUDOKU_PLAY -> updateSUDOKU_PLAY();
+        }
+    }
+
+    private void updateMAIN_MENU() {
+        if ( keyHandler.isStepSolverPressed() ) {
+            gameState = GameState.SUDOKU_PLAY;
+        }
+    }
+
+    private void updateSUDOKU_PLAY() {
         tiles.update();
         if ( keyHandler.isSolveBoardPressed() ) {
             stateControl.saveState();
