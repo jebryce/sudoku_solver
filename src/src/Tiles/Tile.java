@@ -36,6 +36,7 @@ public class Tile implements Cloneable {
         value = newValue;
         tileStatus = TileStatus.SET;
         setVisibleDuplicates();
+        unsetVisibleNotes( value );
     }
 
     public void clear() {
@@ -191,6 +192,24 @@ public class Tile implements Cloneable {
                 visibleTile.setVisibleDuplicates();
             }
         }
+    }
+
+    private void unsetVisibleNotes( final int noteNumber ) {
+        for ( Tile visibleTile : visibleTiles ) {
+            if ( visibleTile == null ) {
+                return;
+            }
+            if ( visibleTile.getTileStatus() == TileStatus.UNSET ) {
+                visibleTile.unsetNote( noteNumber );
+            }
+        }
+    }
+
+    private void unsetNote( final int noteNumber ) {
+        if ( tileStatus != TileStatus.UNSET ) {
+            return;
+        }
+        notes[noteNumber - 1] = false;
     }
 
     private boolean valueIsInvalid( final int newValue ) {

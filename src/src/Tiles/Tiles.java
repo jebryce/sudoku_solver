@@ -5,7 +5,6 @@ import Main.Constants;
 public class Tiles implements Cloneable {
     private Tile[][] tiles = new Tile[Constants.NUM_TILES][Constants.NUM_TILES];
 
-
     public Tile[][] getTiles() {
         return tiles;
     }
