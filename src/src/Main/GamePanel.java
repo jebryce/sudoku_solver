@@ -25,8 +25,8 @@ public class GamePanel extends JPanel implements Runnable {
     private final StateControl     stateControl     = new StateControl();
     private final PaintableTiles   tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
-    private final Menu             mainMenu         = new Menu( keyHandler, mouseHandler );
     private       GameState        gameState        = GameState.MAIN_MENU;
+    private final Menu             mainMenu         = new Menu( keyHandler, mouseHandler, this );
 
 
     public GamePanel() {
@@ -91,12 +91,9 @@ public class GamePanel extends JPanel implements Runnable {
         super.paintComponent( graphics );
         Graphics2D graphics2D = (Graphics2D) graphics;
         switch ( gameState ) {
-            case MAIN_MENU -> {
-                mainMenu.repaint( graphics2D );
-            }
-            case SUDOKU_PLAY -> {
-                tiles.repaint( graphics2D );
-            }
+            case MAIN_MENU   -> mainMenu.repaint( graphics2D );
+            case SUDOKU_PLAY -> tiles.repaint( graphics2D );
+
         }
         graphics2D.dispose();
     }
@@ -125,5 +122,9 @@ public class GamePanel extends JPanel implements Runnable {
         if ( keyHandler.isUndoPressed() ) {
             tiles.loadTiles( stateControl.undo() ) ;
         }
+    }
+
+    public void setGameState( final GameState newGameState ) {
+        gameState = newGameState;
     }
 }
