@@ -40,7 +40,14 @@ public class PaintableTiles extends Tiles {
         }
     }
 
-    public void repaintTilesBackground( final Graphics2D graphics2D ) {
+    public void repaint( final Graphics2D graphics2D ) {
+        repaintTilesBackground( graphics2D );
+        repaintTilesText( graphics2D );
+        repaintTilesNotes( graphics2D );
+        drawGrid( graphics2D );
+    }
+
+    private void repaintTilesBackground( final Graphics2D graphics2D ) {
         final int xCord = mouseHandler.xPos / Constants.TILE_SIZE;
         final int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
         final int value = getTiles()[xCord][yCord].getValue();
@@ -68,7 +75,7 @@ public class PaintableTiles extends Tiles {
         }
     }
 
-    public void repaintTilesText( final Graphics2D graphics2D ) {
+    private void repaintTilesText( final Graphics2D graphics2D ) {
         graphics2D.setFont( new Font( null, Font.PLAIN, Constants.TEXT_SIZE ) );
         int x,y;
         for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
@@ -78,7 +85,7 @@ public class PaintableTiles extends Tiles {
         }
     }
 
-    public void repaintTilesNotes( final Graphics2D graphics2D ) {
+    private void repaintTilesNotes( final Graphics2D graphics2D ) {
         graphics2D.setFont( new Font( null, Font.PLAIN, Constants.NOTES_TEXT_SIZE ) );
         int x,y;
         for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
@@ -88,7 +95,7 @@ public class PaintableTiles extends Tiles {
         }
     }
 
-    public void drawGrid( final Graphics2D graphics2D ) {
+    private void drawGrid( final Graphics2D graphics2D ) {
         graphics2D.setColor( Colors.CHARCOAL );
         int offset = Constants.TILE_SIZE;
         for ( int i = 1; i < Constants.NUM_TILES; i++ ){

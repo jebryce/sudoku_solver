@@ -25,6 +25,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final StateControl     stateControl     = new StateControl();
     private final PaintableTiles   tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
+    private final Menu             mainMenu         = new Menu( keyHandler, mouseHandler );
     private       GameState        gameState        = GameState.MAIN_MENU;
 
 
@@ -91,13 +92,10 @@ public class GamePanel extends JPanel implements Runnable {
         Graphics2D graphics2D = (Graphics2D) graphics;
         switch ( gameState ) {
             case MAIN_MENU -> {
-
+                mainMenu.repaint( graphics2D );
             }
             case SUDOKU_PLAY -> {
-                tiles.repaintTilesBackground( graphics2D );
-                tiles.repaintTilesText( graphics2D );
-                tiles.repaintTilesNotes( graphics2D );
-                tiles.drawGrid( graphics2D );
+                tiles.repaint( graphics2D );
             }
         }
         graphics2D.dispose();
@@ -105,14 +103,8 @@ public class GamePanel extends JPanel implements Runnable {
 
     private void update() {
         switch ( gameState ) {
-            case MAIN_MENU   -> updateMAIN_MENU();
+            case MAIN_MENU   -> mainMenu.update();
             case SUDOKU_PLAY -> updateSUDOKU_PLAY();
-        }
-    }
-
-    private void updateMAIN_MENU() {
-        if ( keyHandler.isStepSolverPressed() ) {
-            gameState = GameState.SUDOKU_PLAY;
         }
     }
 
