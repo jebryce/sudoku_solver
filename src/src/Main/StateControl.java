@@ -1,15 +1,15 @@
 package Main;
 
 import Tiles.Tile;
-import Tiles.Tiles;
+import Tiles.PaintableTiles;
 
 public class StateControl {
     private final int        maxHistory    = 100;
     private final Tile[][][] tilesHistory  = new Tile[maxHistory][Constants.NUM_TILES][Constants.NUM_TILES];
     private       int        currentDepth  = 0;
-    private       Tiles      linkedTiles;
+    private PaintableTiles linkedTiles;
 
-    public void setLinkedTiles( final Tiles tiles ) {
+    public void setLinkedTiles( final PaintableTiles tiles ) {
         linkedTiles = tiles;
         tilesHistory[0] = linkedTiles.getTiles();
     }
