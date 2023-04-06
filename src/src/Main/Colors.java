@@ -13,4 +13,5 @@ public class Colors {
     public static final Color CORAL_PINK     = new Color( 248, 131, 121 );
     public static final Color CACTUS_GREEN   = new Color( 146, 191, 111 );
     public static final Color SAP_GREEN      = new Color(  80, 125,  42 );
+    public static final Color FOREST_GREEN   = new Color(  34, 139,  34 );
 }
