@@ -18,7 +18,7 @@ public class BruteForceSolver {
         loadFinal( board );
     }
 
-    public char[] solve() {
+    public void solve() {
         long time = System.nanoTime();
         do {
             step();
@@ -29,17 +29,15 @@ public class BruteForceSolver {
                 (double) time / Constants.NANO_SEC_PER_M_SEC );
         System.out.format( "                                   or %.4f seconds.\n",
                 (double) time / Constants.NANO_SEC_PER_SEC );
-
-        return saveBoard();
     }
 
-    public char[] step() {
+    public void step() {
         // first find the first empty tile
         int tileNum = findFirstEmptyTile();
 
         // if there isn't an empty tile, the board is full, and (hopefully) it is solved!
         if ( tileNum == NOT_FOUND ) {
-            return saveBoard();
+            return;
         }
 
         int value;
@@ -54,14 +52,12 @@ public class BruteForceSolver {
             // else if there is a placeable value, place it!
             else {
                 placeAValue( value, tileNum );
-                return saveBoard();
+                return;
             }
         } while ( tileNum != NOT_FOUND );
-
         // most of the time if you reach here the board is unsolvable.
         // there is an edge case, but I am deciding not to worry about it right now
         // try board: "12345678000000000I000000000000000000000000000000000000000000000000000000000000000" to showcase it
-        return saveBoard();
     }
 
     private int findFirstEmptyTile() {
@@ -160,7 +156,7 @@ public class BruteForceSolver {
         tiles[xCord][yCord] = EMPTY_TILE;
     }
 
-    private char[] saveBoard() {
+    public char[] getBoard() {
         int xCord;
         int yCord;
         char newBoardValue;
