@@ -10,7 +10,7 @@ public class MenuButton {
     private final int textXPos;
     private final int textYPos;
     private final String text;
-    private final Font font = new Font( null, Font.PLAIN, Constants.MENU_TEXT_SIZE );
+    private final Font font;
     private final GameState returnState;
 
     public MenuButton( final int xPos, final int yPos, final int width, final int height, final String text, final GameState returnState ) {
@@ -24,6 +24,21 @@ public class MenuButton {
         int textHeight = 15;
         this.textYPos = yPos + ( height + textHeight ) / 2 ;
         this.returnState = returnState;
+        font = new Font( null, Font.PLAIN, Constants.MENU_TEXT_SIZE );
+    }
+
+    public MenuButton( final int yPos, final int height, final String text ) {
+        this.xPos = 0;
+        this.yPos = yPos;
+        this.width = -1;
+        this.height = height;
+        this.text = text;
+        int xOffset = 15;
+        this.textXPos = xPos + xOffset;
+        int textHeight = 15;
+        this.textYPos = yPos + ( height + textHeight ) / 2 ;
+        this.returnState = null;
+        font = new Font( null, Font.PLAIN, Constants.NOTES_TEXT_SIZE );
     }
 
     public boolean isPointOnButton( final int xPos, final int yPos ) {
@@ -47,6 +62,9 @@ public class MenuButton {
     }
 
     public void repaint( final Graphics2D graphics2D ) {
+//        graphics2D.setColor( Colors.CORAL_PINK );
+//        graphics2D.fillRect( xPos, yPos, width, height );
+//        graphics2D.setColor( Colors.SAP_GREEN );
         graphics2D.setFont( font );
         graphics2D.drawString( text, textXPos, textYPos );
     }
