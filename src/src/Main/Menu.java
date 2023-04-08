@@ -8,11 +8,13 @@ public class Menu {
     private final GamePanel    gamePanel;
     private final int          maxOptions = 10;
     private final MenuButton[] menuButtons = new MenuButton[maxOptions];
+    private final GameState    escapeGameState;
 
-    public Menu( final KeyHandler keyHandler, final MouseHandler mouseHandler, final GamePanel gamePanel ) {
+    public Menu( final KeyHandler keyHandler, final MouseHandler mouseHandler, final GamePanel gamePanel, final GameState escapeGameState ) {
         this.keyHandler   = keyHandler;
         this.mouseHandler = mouseHandler;
         this.gamePanel    = gamePanel;
+        this.escapeGameState = escapeGameState;
     }
 
     public void addOption( MenuButton newMenuButton) {
@@ -24,6 +26,9 @@ public class Menu {
     }
 
     public void update() {
+        if ( keyHandler.isEscapeMenuPressed() ) {
+            gamePanel.setGameState( escapeGameState );
+        }
         int xPos = mouseHandler.xPos;
         int yPos = mouseHandler.yPos;
         if ( mouseHandler.isMouseClicked() ) {

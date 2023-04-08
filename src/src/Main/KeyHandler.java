@@ -6,7 +6,9 @@ import java.awt.event.KeyListener;
 public class KeyHandler implements KeyListener {
     public  boolean[]    numbersPressed = new boolean[Constants.NUM_VALUES];
     private boolean      spacePressed, backspacePressed, shiftPressed, enterPressed, commandPressed, zPressed;
+    private boolean      escapePressed;
     private boolean      clearTilePressed, noteModePressed, stepSolverPressed, solveBoardPressed, undoPressed;
+    private boolean      escapeMenuPressed;
 
 
     @Override
@@ -36,6 +38,9 @@ public class KeyHandler implements KeyListener {
         if ( code == KeyEvent.VK_Z ) {
             zPressed = true;
         }
+        if ( code == KeyEvent.VK_ESCAPE ) {
+            escapePressed = true;
+        }
 
         checkKeyBinds();
     }
@@ -61,6 +66,9 @@ public class KeyHandler implements KeyListener {
         if ( code == KeyEvent.VK_Z ) {
             zPressed = false;
         }
+        if ( code == KeyEvent.VK_ESCAPE ) {
+            escapePressed = false;
+        }
 
         checkKeyBinds();
     }
@@ -71,6 +79,7 @@ public class KeyHandler implements KeyListener {
         stepSolverPressed = enterPressed;
         solveBoardPressed = shiftPressed && enterPressed;
         undoPressed       = zPressed     && commandPressed;
+        escapeMenuPressed = escapePressed;
     }
 
     public boolean isClearTilePressed() {
@@ -104,6 +113,14 @@ public class KeyHandler implements KeyListener {
     public boolean isUndoPressed() {
         if ( undoPressed ) {
             undoPressed = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isEscapeMenuPressed() {
+        if ( escapeMenuPressed ) {
+            escapeMenuPressed = false;
             return true;
         }
         return false;
