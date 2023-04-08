@@ -167,6 +167,16 @@ public class Tile implements Cloneable {
         return false;
     }
 
+    public void setPossibleNotes() {
+        Arrays.fill( notes, true );
+        for ( Tile visibleTile : visibleTiles ) {
+            if ( visibleTile == null ) {
+                return;
+            }
+            unsetNote( visibleTile.getValue() );
+        }
+    }
+
     protected void setVisibleDuplicates() {
         if ( tileStatus == TileStatus.UNSET ) {
             return;
@@ -207,6 +217,9 @@ public class Tile implements Cloneable {
 
     private void unsetNote( final int noteNumber ) {
         if ( tileStatus != TileStatus.UNSET ) {
+            return;
+        }
+        if ( noteNumber == 0 ) {
             return;
         }
         notes[noteNumber - 1] = false;

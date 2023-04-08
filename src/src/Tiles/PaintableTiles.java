@@ -34,7 +34,7 @@ public class PaintableTiles extends Tiles {
                 keyHandler.numbersPressed[i] = false;
             }
         }
-        if ( keyHandler.isClearTilePressed() && currentTile.isNotEmpty()) {
+        if ( keyHandler.isClearTilePressed() && currentTile.isNotEmpty() ) {
             stateControl.saveState();
             currentTile.clear();
         }

@@ -1,6 +1,7 @@
 package Main;
 
 import Solver.BruteForceSolver;
+import Solver.SieveSolver;
 import Tiles.PaintableTiles;
 
 import java.awt.*;
@@ -9,9 +10,9 @@ import javax.swing.JPanel;
 
 public class GamePanel extends JPanel implements Runnable {
     // typical sudoku board
-//    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
     // hard sudoku board
-    private char[] board = "000009806000001020700300000080000100600050402004000030000000000003407080200103005".toCharArray();
+//    private char[] board = "000009806000001020700300000080000100600050402004000030000000000003407080200103005".toCharArray();
     // blank sudoku board
 //    private char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
     // funky edge case sudoku board - not solvable at start, but need to erase a tile to solve
@@ -25,6 +26,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final StateControl     stateControl     = new StateControl();
     private final PaintableTiles   tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
+    private final SieveSolver      sieveSolver      = new SieveSolver( tiles );
     private       GameState        gameState        = GameState.MAIN_MENU;
     private final Menu             mainMenu         = new Menu( keyHandler, mouseHandler, this, GameState.CLOSE_GAME );
     private final Menu             controlsMenu     = new Menu( keyHandler, mouseHandler, this, GameState.MAIN_MENU );
@@ -135,10 +137,11 @@ public class GamePanel extends JPanel implements Runnable {
         }
         else if ( keyHandler.isStepSolverPressed() ) {
             stateControl.saveState();
-            bruteForceSolver.updateBoard( tiles.saveBoard() );
-            bruteForceSolver.step();
-            board = bruteForceSolver.getBoard();
-            tiles.loadBoard( board );
+//            bruteForceSolver.updateBoard( tiles.saveBoard() );
+//            bruteForceSolver.step();
+//            board = bruteForceSolver.getBoard();
+            sieveSolver.step();
+//            tiles.loadBoard( board );
         }
         if ( keyHandler.isUndoPressed() ) {
             tiles.loadTiles( stateControl.undo() ) ;
