@@ -38,6 +38,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseMotionListener( mouseHandler );
         this.addMouseListener( mouseHandler );
         this.setFocusable( true );
+
+        MenuButton newButton = new MenuButton(0,0,77,40, "Play", GameState.SUDOKU_PLAY);
+        mainMenu.addOption( newButton );
     }
 
     @Override

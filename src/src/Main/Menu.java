@@ -6,6 +6,8 @@ public class Menu {
     private final KeyHandler   keyHandler;
     private final MouseHandler mouseHandler;
     private final GamePanel    gamePanel;
+    private final int          maxOptions = 10;
+    private final MenuButton[] menuButtons = new MenuButton[maxOptions];
 
     public Menu( final KeyHandler keyHandler, final MouseHandler mouseHandler, final GamePanel gamePanel ) {
         this.keyHandler   = keyHandler;
@@ -13,30 +15,49 @@ public class Menu {
         this.gamePanel    = gamePanel;
     }
 
+    public void addOption( MenuButton newMenuButton) {
+        int index = 0;
+        while ( menuButtons[index] != null ) {
+            index++;
+        }
+        menuButtons[index] = newMenuButton;
+    }
+
     public void update() {
+        int xPos = mouseHandler.xPos;
+        int yPos = mouseHandler.yPos;
         if ( mouseHandler.isMouseClicked() ) {
-            gamePanel.setGameState( GameState.SUDOKU_PLAY );
+            for ( MenuButton menuButton : menuButtons ) {
+                if ( menuButton == null ) {
+                    break;
+                }
+                if ( menuButton.isPointOnButton( xPos, yPos ) ) {
+                    gamePanel.setGameState( menuButton.getReturnState() );
+                    break;
+                }
+            }
         }
     }
 
     public void repaint( final Graphics2D graphics2D ) {
         graphics2D.setColor( Colors.CACTUS_GREEN );
         graphics2D.fillRect( 0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT );
+        int xPos = mouseHandler.xPos;
+        int yPos = mouseHandler.yPos;
 
-        repaintPlayText( graphics2D );
+        for ( MenuButton menuButton : menuButtons ) {
+            if ( menuButton == null ) {
+                break;
+            }
+            if ( menuButton.isPointOnButton( xPos, yPos ) ) {
+                graphics2D.setColor( Colors.DARK_FOREST_GREEN );
+            }
+            else {
+                graphics2D.setColor( Colors.SAP_GREEN );
+            }
+            menuButton.repaint( graphics2D );
+        }
 
-        repaintText( graphics2D );
-    }
-
-    private void repaintPlayText( final Graphics2D graphics2D ) {
-        int textX = 15;
-        int textY = 34;
-        graphics2D.setColor( Colors.SAP_GREEN );
-        graphics2D.setFont( new Font( null, Font.BOLD, Constants.MENU_TEXT_SIZE ) );
-        graphics2D.drawString( "Play", textX, textY );
-    }
-
-    private void repaintText( final Graphics2D graphics2D ) {
         repaintTitle( graphics2D );
         repaintAuthorName( graphics2D );
     }

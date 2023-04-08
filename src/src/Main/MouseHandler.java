@@ -20,12 +20,12 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
     }
 
     @Override
-    public void mouseClicked( MouseEvent e ) {
-        mouseClick = true;
-    }
+    public void mouseClicked( MouseEvent e ) { }
 
     @Override
-    public void mousePressed( MouseEvent e ) { }
+    public void mousePressed( MouseEvent e ) {
+        mouseClick = true;
+    }
 
     @Override
     public void mouseReleased( MouseEvent e ) { }
