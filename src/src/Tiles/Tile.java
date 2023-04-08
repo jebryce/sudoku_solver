@@ -12,6 +12,7 @@ public class Tile implements Cloneable {
     private       int        value        = 0;
     private       TileStatus tileStatus   = TileStatus.UNSET;
     private       boolean[]  notes        = new boolean[Constants.NUM_TILES];
+    private       int        numNotes     = 0;
     private       Tile[]     visibleTiles = new Tile[Constants.TOTAL_TILES];
 
     public Tile( final int xCord, final int yCord ) {
@@ -44,6 +45,7 @@ public class Tile implements Cloneable {
             return;
         }
         Arrays.fill( notes, false );
+        numNotes = 0;
         value = 0;
         tileStatus = TileStatus.UNSET;
         clearVisibleDuplicates();
@@ -54,6 +56,12 @@ public class Tile implements Cloneable {
             return;
         }
         notes[newNote - 1] = !notes[newNote - 1];
+        if ( notes[newNote - 1] ) {
+            numNotes++;
+        }
+        else {
+            numNotes--;
+        }
     }
 
     public int getValue() {
@@ -159,21 +167,33 @@ public class Tile implements Cloneable {
         if ( tileStatus != TileStatus.UNSET ) {
             return true;
         }
-        for ( boolean note : notes ) {
-            if ( note ) {
-                return true;
-            }
+        if ( numNotes != 0 ) {
+            return true;
         }
         return false;
     }
 
     public void setPossibleNotes() {
         Arrays.fill( notes, true );
+        numNotes = Constants.NUM_TILES;
         for ( Tile visibleTile : visibleTiles ) {
             if ( visibleTile == null ) {
                 return;
             }
             unsetNote( visibleTile.getValue() );
+        }
+    }
+
+    public int getNumNotes() {
+        return numNotes;
+    }
+
+    public void setValueToFirstNote() {
+        for ( int i = 1; i <= Constants.NUM_TILES; i++ ) {
+            if ( notes[i - 1] ) {
+                setValue( i );
+                return;
+            }
         }
     }
 
@@ -222,7 +242,9 @@ public class Tile implements Cloneable {
         if ( noteNumber == 0 ) {
             return;
         }
-        notes[noteNumber - 1] = false;
+        if ( notes[noteNumber - 1] ) {
+            setNote( noteNumber ); // setNote keeps numNotes correct, so best to call instead of duplicating code
+        }
     }
 
     private boolean valueIsInvalid( final int newValue ) {
