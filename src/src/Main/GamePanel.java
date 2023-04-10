@@ -134,14 +134,15 @@ public class GamePanel extends JPanel implements Runnable {
             bruteForceSolver.solve();
             board = bruteForceSolver.getBoard();
             tiles.loadBoard( board );
+            sieveSolver.solve();
         }
         else if ( keyHandler.isStepSolverPressed() ) {
             stateControl.saveState();
 //            bruteForceSolver.updateBoard( tiles.saveBoard() );
 //            bruteForceSolver.step();
 //            board = bruteForceSolver.getBoard();
-            sieveSolver.step();
 //            tiles.loadBoard( board );
+            sieveSolver.step();
         }
         if ( keyHandler.isUndoPressed() ) {
             tiles.loadTiles( stateControl.undo() ) ;

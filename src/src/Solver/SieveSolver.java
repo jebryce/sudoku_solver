@@ -2,7 +2,6 @@ package Solver;
 
 import Main.Constants;
 import Tiles.Tiles;
-import Tiles.TileStatus;
 import Tiles.Tile;
 
 public class SieveSolver {
@@ -11,6 +10,19 @@ public class SieveSolver {
 
     public SieveSolver( final Tiles tiles ) {
         this.tiles = tiles.getTiles();
+    }
+
+    public void solve() {
+        long time = System.nanoTime();
+        do {
+            step();
+        } while ( sieveStatus != SieveStatus.SOLVED  );
+        time = System.nanoTime() - time;
+        System.out.format( "This basic sieve solver took: %d nanoseconds,\n", time );
+        System.out.format( "                           or %.4f milliseconds,\n",
+                (double) time / Constants.NANO_SEC_PER_M_SEC );
+        System.out.format( "                           or %.4f seconds.\n",
+                (double) time / Constants.NANO_SEC_PER_SEC );
     }
 
     public void step() {
@@ -25,7 +37,6 @@ public class SieveSolver {
         //      all tiles are filled and board is solved -----------------------------> return
         //      or board needs more advanced logic to solve, so give up --------------> return
         switch ( sieveStatus ) {
-            case UNSOLVABLE -> {}
             case NOTE_TAKE -> stepNoteTake();
             case SET_VALUE -> setValueStep();
         }
@@ -40,15 +51,12 @@ public class SieveSolver {
                 continue;
             }
             tiles[xCord][yCord].setPossibleNotes();
-            if ( tiles[xCord][yCord].isNotEmpty() ) {
-                return;
-            }
-            sieveStatus = SieveStatus.UNSOLVABLE;
         }
         sieveStatus = SieveStatus.SET_VALUE;
     }
 
     private void setValueStep() {
+        boolean didNothing = true;
         int xCord, yCord;
         for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
             xCord = i % Constants.NUM_TILES;
@@ -57,8 +65,10 @@ public class SieveSolver {
                 continue;
             }
             tiles[xCord][yCord].setValueToFirstNote();
-            return;
+            didNothing = false;
         }
-        sieveStatus = SieveStatus.SOLVED;
+        if ( didNothing ) {
+            sieveStatus = SieveStatus.SOLVED;
+        }
     }
 }
