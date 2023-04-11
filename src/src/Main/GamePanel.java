@@ -27,9 +27,6 @@ public class GamePanel extends JPanel implements Runnable {
     private final PaintableTiles   tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
     private final SieveSolver      sieveSolver      = new SieveSolver( tiles );
-    private       GameState        gameState        = GameState.MAIN_MENU;
-    private final Menu             mainMenu         = new Menu( keyHandler, mouseHandler, this, GameState.CLOSE_GAME );
-    private final Menu             controlsMenu     = new Menu( keyHandler, mouseHandler, this, GameState.MAIN_MENU );
 
 
     public GamePanel() {
@@ -41,18 +38,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.addMouseMotionListener( mouseHandler );
         this.addMouseListener( mouseHandler );
         this.setFocusable( true );
-
-        mainMenu.addOption( new MenuButton( 0,  1, 77, 39, "Play", GameState.SUDOKU_PLAY ) );
-        mainMenu.addOption( new MenuButton( 0, 40, 129, 40, "Controls", GameState.CONTROLS_MENU ) );
-
-
-        controlsMenu.addOption( new MenuButton(   0, 25, "Press 'escape' anytime to return to the previous menu" ) );
-        controlsMenu.addOption( new MenuButton(  25, 25, "Press the numbers '1' through '9' to enter a value into a tile" ) );
-        controlsMenu.addOption( new MenuButton(  50, 25, "Hold 'shift' while pressing a number to add a note to a tile" ) );
-        controlsMenu.addOption( new MenuButton(  75, 25, "Press either 'space' or 'backspace' to clear a tile" ) );
-        controlsMenu.addOption( new MenuButton( 100, 25, "Press 'command + z' to undo the last action" ) );
-        controlsMenu.addOption( new MenuButton( 125, 25, "Press 'enter' to step through the current solver" ) );
-        controlsMenu.addOption( new MenuButton( 150, 25, "Press 'shift + enter' to use the current solver to solve the board" ) );
     }
 
     @Override
@@ -106,27 +91,13 @@ public class GamePanel extends JPanel implements Runnable {
     protected void paintComponent ( final Graphics graphics ) {
         super.paintComponent( graphics );
         Graphics2D graphics2D = (Graphics2D) graphics;
-        switch ( gameState ) {
-            case CLOSE_GAME    -> System.exit(0);
-            case MAIN_MENU     -> mainMenu.repaint( graphics2D );
-            case SUDOKU_PLAY   -> tiles.repaint( graphics2D );
-            case CONTROLS_MENU -> controlsMenu.repaint( graphics2D );
-        }
+        tiles.repaint( graphics2D );
         graphics2D.dispose();
     }
 
     private void update() {
-        switch ( gameState ) {
-            case CLOSE_GAME    -> System.exit(0);
-            case MAIN_MENU     -> mainMenu.update();
-            case SUDOKU_PLAY   -> updateSUDOKU_PLAY();
-            case CONTROLS_MENU -> controlsMenu.update();
-        }
-    }
-
-    private void updateSUDOKU_PLAY() {
-        if ( keyHandler.isEscapeMenuPressed() ) {
-            gameState = GameState.MAIN_MENU;
+        if ( keyHandler.isEndGamePressed() ) {
+            System.exit(0);
         }
         if ( keyHandler.isSolveBoardPressed() ) {
             stateControl.saveState();
@@ -148,9 +119,5 @@ public class GamePanel extends JPanel implements Runnable {
             tiles.loadTiles( stateControl.undo() ) ;
         }
         tiles.update();
-    }
-
-    public void setGameState( final GameState newGameState ) {
-        gameState = newGameState;
     }
 }

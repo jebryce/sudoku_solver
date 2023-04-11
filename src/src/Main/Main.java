@@ -1,6 +1,6 @@
 package Main;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -10,8 +10,18 @@ public class Main {
         window.setResizable( false );
         window.setTitle( "Sudoku" );
 
+        JMenuBar menuBar = new JMenuBar();
+
+        window.setJMenuBar(menuBar);
+
         GamePanel gamePanel = new GamePanel();
         window.add( gamePanel );
+
+        JMenu menu = new JMenu("A Menu");
+        menuBar.add(menu);
+
+        JMenuItem menuItem = new JMenuItem("A text-only menu item");
+        menu.add(menuItem);
 
         window.pack();
 

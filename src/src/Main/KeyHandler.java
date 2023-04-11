@@ -8,7 +8,7 @@ public class KeyHandler implements KeyListener {
     private boolean      spacePressed, backspacePressed, shiftPressed, enterPressed, commandPressed, zPressed;
     private boolean      escapePressed;
     private boolean      clearTilePressed, noteModePressed, stepSolverPressed, solveBoardPressed, undoPressed;
-    private boolean      escapeMenuPressed;
+    private boolean      endGamePressed;
 
 
     @Override
@@ -79,7 +79,7 @@ public class KeyHandler implements KeyListener {
         stepSolverPressed = enterPressed;
         solveBoardPressed = shiftPressed && enterPressed;
         undoPressed       = zPressed     && commandPressed;
-        escapeMenuPressed = escapePressed;
+        endGamePressed    = escapePressed;
     }
 
     public boolean isClearTilePressed() {
@@ -118,9 +118,9 @@ public class KeyHandler implements KeyListener {
         return false;
     }
 
-    public boolean isEscapeMenuPressed() {
-        if ( escapeMenuPressed ) {
-            escapeMenuPressed = false;
+    public boolean isEndGamePressed() {
+        if ( endGamePressed ) {
+            endGamePressed = false;
             return true;
         }
         return false;
