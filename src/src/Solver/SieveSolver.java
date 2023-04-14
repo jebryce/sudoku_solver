@@ -2,6 +2,8 @@ package Solver;
 
 import Main.Constants;
 
+import java.util.Arrays;
+
 public class SieveSolver extends Solver{
     private       SieveStatus   sieveStatus = SieveStatus.NOTE_TAKE;
     private final boolean[][][] notes       = new boolean[Constants.NUM_TILES][Constants.NUM_TILES][Constants.NUM_TILES];
@@ -45,18 +47,36 @@ public class SieveSolver extends Solver{
     }
 
     private void stepNoteTake() {
+        fillAllNotes();
+        eraseNotesSeeingSetNumbers();
+        sieveStatus = SieveStatus.SET_VALUE;
+    }
+
+    private void fillAllNotes() {
         int xCord, yCord;
         for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
             xCord = i % Constants.NUM_TILES;
             yCord = i / Constants.NUM_TILES;
-            notes[5][xCord][yCord] = true;
-//            if ( tiles[xCord][yCord].isNotEmpty() ) {
-//                continue;
-//            }
-//            tiles[xCord][yCord].setPossibleNotes();
+            Arrays.fill( notes[xCord][yCord], true );
         }
-        sieveStatus = SieveStatus.SET_VALUE;
     }
+
+    private void eraseNotesSeeingSetNumbers() {
+        int xCord, yCord;
+        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
+            xCord = i % Constants.NUM_TILES;
+            yCord = i / Constants.NUM_TILES;
+            if ( tiles[xCord][yCord] == 0 ) {
+                continue;
+            }
+            eraseNotesSeeingCell( xCord, yCord );
+        }
+    }
+
+    private void eraseNotesSeeingCell( final int xCord, final int yCord ) {
+
+    }
+
 
     private void setValueStep() {
 //        boolean didNothing = true;
@@ -82,7 +102,7 @@ public class SieveSolver extends Solver{
             xCord = tileNum % Constants.NUM_TILES;
             yCord = tileNum / Constants.NUM_TILES;
             for ( int i = 0; i < Constants.NUM_TILES; i++ ) {
-                this.notes[i][xCord][yCord] = notes[i][tileNum] == 1;
+                this.notes[xCord][yCord][i] = notes[tileNum][i] == 1;
             }
         }
     }
@@ -90,16 +110,16 @@ public class SieveSolver extends Solver{
     public char[][] getNotes() {
         int xCord;
         int yCord;
-        char[][] notes = new char[Constants.NUM_TILES][Constants.TOTAL_TILES];
+        char[][] notes = new char[Constants.TOTAL_TILES][Constants.NUM_TILES];
         for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
             xCord = tileNum % Constants.NUM_TILES;
             yCord = tileNum / Constants.NUM_TILES;
             for ( int i = 0; i < Constants.NUM_TILES; i++ ) {
-                if ( this.notes[i][xCord][yCord] ) {
-                    notes[i][tileNum] = 1;
+                if ( this.notes[xCord][yCord][i] ) {
+                    notes[tileNum][i] = 1;
                 }
                 else {
-                    notes[i][tileNum] = 0;
+                    notes[tileNum][i] = 0;
                 }
             }
         }
