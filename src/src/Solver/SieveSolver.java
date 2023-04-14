@@ -4,11 +4,12 @@ import Main.Constants;
 import Tiles.Tiles;
 import Tiles.Tile;
 
-public class SieveSolver {
+public class SieveSolver extends Solver{
     private final Tile[][]    tiles;
     private       SieveStatus sieveStatus = SieveStatus.NOTE_TAKE;
 
     public SieveSolver( final Tiles tiles ) {
+        super("000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray());
         this.tiles = tiles.getTiles();
     }
 

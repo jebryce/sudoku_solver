@@ -2,20 +2,12 @@ package Solver;
 
 import Main.Constants;
 
-public class BruteForceSolver {
+public class BruteForceSolver extends Solver {
     private final int         EMPTY_TILE = 0;
     private final int         NOT_FOUND  = -1;
-    private final int[][]     tiles      = new int[Constants.NUM_TILES][Constants.NUM_TILES];
-    private final boolean[][] finalTiles = new boolean[Constants.NUM_TILES][Constants.NUM_TILES];
 
     public BruteForceSolver( final char[] board ) {
-        loadBoard( board );
-        loadFinal( board );
-    }
-
-    public void updateBoard( final char[] board ) {
-        loadBoard( board );
-        loadFinal( board );
+        super( board );
     }
 
     public void solve() {
@@ -154,54 +146,6 @@ public class BruteForceSolver {
             return;
         }
         tiles[xCord][yCord] = EMPTY_TILE;
-    }
-
-    public char[] getBoard() {
-        int xCord;
-        int yCord;
-        char newBoardValue;
-        char[] board = new char[Constants.TOTAL_TILES];
-        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
-            xCord = i % Constants.NUM_TILES;
-            yCord = i / Constants.NUM_TILES;
-            newBoardValue  = (char) tiles[xCord][yCord];
-            if ( finalTiles[xCord][yCord] || newBoardValue == 0 ) {
-                newBoardValue += '0';
-            }
-            else {
-                newBoardValue += 'A' - 1;
-            }
-            board[i]       = newBoardValue;
-        }
-        return board;
-    }
-
-    private void loadBoard( final char[] board ) {
-        int xCord;
-        int yCord;
-        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
-            xCord = i % Constants.NUM_TILES;
-            yCord = i / Constants.NUM_TILES;
-            if ( board[i] >= '1' && board[i] <= '9' ) {
-                tiles[xCord][yCord] = board[i] - '0';
-            }
-            else if ( board[i] >= 'A' && board[i] <= 'I' ) {
-                tiles[xCord][yCord] = board[i] - 'A' + 1;
-            }
-            else {
-                tiles[xCord][yCord] = 0;
-            }
-        }
-    }
-
-    private void loadFinal( final char[] board ) {
-        int xCord;
-        int yCord;
-        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
-            xCord = i % Constants.NUM_TILES;
-            yCord = i / Constants.NUM_TILES;
-            finalTiles[xCord][yCord] = board[i] >= '1' && board[i] <= '9';
-        }
     }
 }
 
