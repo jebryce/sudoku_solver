@@ -2,17 +2,18 @@ package Main;
 
 import Solver.BruteForceSolver;
 import Solver.SieveSolver;
+import Solver.Solvers;
 import Tiles.PaintableTiles;
 
 import java.awt.*;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable {
     // typical sudoku board
-    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
+//    private char[] board = "000260001680070090190004500820100040004602900050003028009300074040050036703018000".toCharArray();
     // hard sudoku board
-//    private char[] board = "000009806000001020700300000080000100600050402004000030000000000003407080200103005".toCharArray();
+    private char[] board = "000009806000001020700300000080000100600050402004000030000000000003407080200103005".toCharArray();
     // blank sudoku board
 //    private char[] board = "000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray();
     // funky edge case sudoku board - not solvable at start, but need to erase a tile to solve
@@ -27,6 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final PaintableTiles   tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
     private final SieveSolver      sieveSolver      = new SieveSolver( tiles );
+    private final boolean[]        solvers          = new boolean[Constants.NUM_SOLVERS];
 
 
     public GamePanel() {
@@ -105,19 +107,23 @@ public class GamePanel extends JPanel implements Runnable {
             bruteForceSolver.solve();
             board = bruteForceSolver.getBoard();
             tiles.loadBoard( board );
-            sieveSolver.solve();
+//            sieveSolver.solve();
         }
         else if ( keyHandler.isStepSolverPressed() ) {
             stateControl.saveState();
-//            bruteForceSolver.updateBoard( tiles.saveBoard() );
-//            bruteForceSolver.step();
-//            board = bruteForceSolver.getBoard();
-//            tiles.loadBoard( board );
-            sieveSolver.step();
+            bruteForceSolver.updateBoard( tiles.saveBoard() );
+            bruteForceSolver.step();
+            board = bruteForceSolver.getBoard();
+            tiles.loadBoard( board );
+//            sieveSolver.step();
         }
         if ( keyHandler.isUndoPressed() ) {
             tiles.loadTiles( stateControl.undo() ) ;
         }
         tiles.update();
+    }
+
+    public void toggleSolver( Solvers solver ) {
+        solvers[solver.ordinal()] = !solvers[solver.ordinal()];
     }
 }

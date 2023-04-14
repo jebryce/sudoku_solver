@@ -21,5 +21,5 @@ public class Constants {
     public static final int    NOTES_Y_OFFSET     = 7;
     public static final int    NOTES_TEXT_WIDTH   = 10;
     public static final float  NOTES_X_OFFSET     = 8.5f;
-    public static final int    MENU_TEXT_SIZE     = TEXT_SIZE * 3 / 4;
+    public static final int    NUM_SOLVERS        = 2;
 }
