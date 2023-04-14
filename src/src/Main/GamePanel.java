@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final PaintableTiles   tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
     private final SieveSolver      sieveSolver      = new SieveSolver( tiles );
-    private final boolean[]        solvers          = new boolean[Constants.NUM_SOLVERS];
+    private       Solvers          solver           = Solvers.NONE;
 
 
     public GamePanel() {
@@ -103,19 +103,27 @@ public class GamePanel extends JPanel implements Runnable {
         }
         if ( keyHandler.isSolveBoardPressed() ) {
             stateControl.saveState();
-            bruteForceSolver.updateBoard( tiles.saveBoard() );
-            bruteForceSolver.solve();
-            board = bruteForceSolver.getBoard();
-            tiles.loadBoard( board );
-//            sieveSolver.solve();
+            switch ( solver ) {
+                case SIEVE_SOLVER -> sieveSolver.solve();
+                case BRUTE_FORCE_SOLVER -> {
+                    bruteForceSolver.updateBoard( tiles.saveBoard() );
+                    bruteForceSolver.solve();
+                    board = bruteForceSolver.getBoard();
+                    tiles.loadBoard( board );
+                }
+            }
         }
         else if ( keyHandler.isStepSolverPressed() ) {
             stateControl.saveState();
-            bruteForceSolver.updateBoard( tiles.saveBoard() );
-            bruteForceSolver.step();
-            board = bruteForceSolver.getBoard();
-            tiles.loadBoard( board );
-//            sieveSolver.step();
+            switch ( solver ) {
+                case SIEVE_SOLVER -> sieveSolver.step();
+                case BRUTE_FORCE_SOLVER -> {
+                    bruteForceSolver.updateBoard( tiles.saveBoard() );
+                    bruteForceSolver.step();
+                    board = bruteForceSolver.getBoard();
+                    tiles.loadBoard( board );
+                }
+            }
         }
         if ( keyHandler.isUndoPressed() ) {
             tiles.loadTiles( stateControl.undo() ) ;
@@ -123,7 +131,12 @@ public class GamePanel extends JPanel implements Runnable {
         tiles.update();
     }
 
-    public void toggleSolver( Solvers solver ) {
-        solvers[solver.ordinal()] = !solvers[solver.ordinal()];
+    public void setSolver( Solvers solver ) {
+        if ( solver != this.solver ) {
+            this.solver = solver;
+        }
+        else {
+            this.solver = Solvers.NONE;
+        }
     }
 }

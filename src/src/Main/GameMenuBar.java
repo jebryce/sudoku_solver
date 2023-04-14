@@ -14,6 +14,10 @@ public class GameMenuBar extends JMenuBar implements ActionListener {
     public GameMenuBar( final GamePanel gamePanel ) {
         this.gamePanel = gamePanel;
 
+        ButtonGroup solvers = new ButtonGroup();
+        solvers.add( bruteForceSolver );
+        solvers.add( sieveSolver );
+
         JMenu solverSelect = new JMenu("Solver Select");
         this.add(solverSelect);
 
@@ -28,10 +32,10 @@ public class GameMenuBar extends JMenuBar implements ActionListener {
     public void actionPerformed( ActionEvent e ) {
         JMenuItem actionSource = (JMenuItem) e.getSource();
         if ( actionSource == bruteForceSolver ) {
-            gamePanel.toggleSolver( Solvers.BRUTE_FORCE_SOLVER );
+            gamePanel.setSolver( Solvers.BRUTE_FORCE_SOLVER );
         }
         if ( actionSource == sieveSolver ) {
-            gamePanel.toggleSolver( Solvers.SIEVE_SOLVER );
+            gamePanel.setSolver( Solvers.SIEVE_SOLVER );
         }
     }
 }
