@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     private final StateControl     stateControl     = new StateControl();
     private final PaintableTiles   tiles            = new PaintableTiles( keyHandler, mouseHandler, stateControl, board );
     private final BruteForceSolver bruteForceSolver = new BruteForceSolver( board );
-    private final SieveSolver      sieveSolver      = new SieveSolver( tiles );
+    private final SieveSolver      sieveSolver      = new SieveSolver( board, tiles.saveNotes() );
     private       Solvers          solver           = Solvers.NONE;
 
 
@@ -116,12 +116,17 @@ public class GamePanel extends JPanel implements Runnable {
         else if ( keyHandler.isStepSolverPressed() ) {
             stateControl.saveState();
             switch ( solver ) {
-                case SIEVE_SOLVER -> sieveSolver.step();
+                case SIEVE_SOLVER -> {
+                    sieveSolver.updateBoard( tiles.saveBoard() );
+                    sieveSolver.updateNotes( tiles.saveNotes() );
+                    sieveSolver.step();
+                    tiles.loadBoard( sieveSolver.getBoard() );
+                    tiles.loadNotes( sieveSolver.getNotes() );
+                }
                 case BRUTE_FORCE_SOLVER -> {
                     bruteForceSolver.updateBoard( tiles.saveBoard() );
                     bruteForceSolver.step();
-                    board = bruteForceSolver.getBoard();
-                    tiles.loadBoard( board );
+                    tiles.loadBoard( bruteForceSolver.getBoard() );
                 }
             }
         }

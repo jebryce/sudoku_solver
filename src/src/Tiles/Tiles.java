@@ -97,6 +97,41 @@ public class Tiles implements Cloneable {
         return board;
     }
 
+    public void loadNotes( final char[][] notes ) {
+        int xCord;
+        int yCord;
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            xCord = tileNum % Constants.NUM_TILES;
+            yCord = tileNum / Constants.NUM_TILES;
+            for ( int i = 0; i < Constants.NUM_TILES; i++ ) {
+                if ( notes[i][tileNum] == 1 ) {
+                    tiles[xCord][yCord].setNote( i + 1 );
+                }
+            }
+        }
+    }
+
+    public char[][] saveNotes() {
+        int xCord;
+        int yCord;
+        boolean[] tileNotes;
+        char[][] notes = new char[Constants.NUM_TILES][Constants.TOTAL_TILES];
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            xCord = tileNum % Constants.NUM_TILES;
+            yCord = tileNum / Constants.NUM_TILES;
+            tileNotes = tiles[xCord][yCord].getNotes();
+            for ( int i = 0; i < Constants.NUM_TILES; i++ ) {
+                if ( tileNotes[i] ) {
+                    notes[i][tileNum] = 1;
+                }
+                else {
+                    notes[i][tileNum] = 0;
+                }
+            }
+        }
+        return notes;
+    }
+
     @Override
     public Tiles clone() {
         try {

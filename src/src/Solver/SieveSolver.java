@@ -1,29 +1,30 @@
 package Solver;
 
 import Main.Constants;
-import Tiles.Tiles;
-import Tiles.Tile;
 
 public class SieveSolver extends Solver{
-    private final Tile[][]    tiles;
-    private       SieveStatus sieveStatus = SieveStatus.NOTE_TAKE;
+    private       SieveStatus   sieveStatus = SieveStatus.NOTE_TAKE;
+    private final boolean[][][] notes       = new boolean[Constants.NUM_TILES][Constants.NUM_TILES][Constants.NUM_TILES];
 
-    public SieveSolver( final Tiles tiles ) {
-        super("000000000000000000000000000000000000000000000000000000000000000000000000000000000".toCharArray());
-        this.tiles = tiles.getTiles();
+    public SieveSolver( final char[] board, final char[][] notes ) {
+        super(board);
+        loadNotes(notes);
     }
 
+    public void updateNotes( final char[][] notes ) {
+        loadNotes( notes );
+    }
     public void solve() {
-        long time = System.nanoTime();
-        do {
-            step();
-        } while ( sieveStatus != SieveStatus.SOLVED  );
-        time = System.nanoTime() - time;
-        System.out.format( "This basic sieve solver took: %d nanoseconds,\n", time );
-        System.out.format( "                           or %.4f milliseconds,\n",
-                (double) time / Constants.NANO_SEC_PER_M_SEC );
-        System.out.format( "                           or %.4f seconds.\n",
-                (double) time / Constants.NANO_SEC_PER_SEC );
+//        long time = System.nanoTime();
+//        do {
+//            step();
+//        } while ( sieveStatus != SieveStatus.SOLVED  );
+//        time = System.nanoTime() - time;
+//        System.out.format( "This basic sieve solver took: %d nanoseconds,\n", time );
+//        System.out.format( "                           or %.4f milliseconds,\n",
+//                (double) time / Constants.NANO_SEC_PER_M_SEC );
+//        System.out.format( "                           or %.4f seconds.\n",
+//                (double) time / Constants.NANO_SEC_PER_SEC );
     }
 
     public void step() {
@@ -48,28 +49,60 @@ public class SieveSolver extends Solver{
         for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
             xCord = i % Constants.NUM_TILES;
             yCord = i / Constants.NUM_TILES;
-            if ( tiles[xCord][yCord].isNotEmpty() ) {
-                continue;
-            }
-            tiles[xCord][yCord].setPossibleNotes();
+            notes[5][xCord][yCord] = true;
+//            if ( tiles[xCord][yCord].isNotEmpty() ) {
+//                continue;
+//            }
+//            tiles[xCord][yCord].setPossibleNotes();
         }
         sieveStatus = SieveStatus.SET_VALUE;
     }
 
     private void setValueStep() {
-        boolean didNothing = true;
-        int xCord, yCord;
-        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
-            xCord = i % Constants.NUM_TILES;
-            yCord = i / Constants.NUM_TILES;
-            if ( tiles[xCord][yCord].getNumNotes() != 1 ) {
-                continue;
+//        boolean didNothing = true;
+//        int xCord, yCord;
+//        for ( int i = 0; i < Constants.TOTAL_TILES; i++ ) {
+//            xCord = i % Constants.NUM_TILES;
+//            yCord = i / Constants.NUM_TILES;
+//            if ( tiles[xCord][yCord].getNumNotes() != 1 ) {
+//                continue;
+//            }
+//            tiles[xCord][yCord].setValueToFirstNote();
+//            didNothing = false;
+//        }
+//        if ( didNothing ) {
+//            sieveStatus = SieveStatus.SOLVED;
+//        }
+    }
+
+    private void loadNotes( final char[][] notes ) {
+        int xCord;
+        int yCord;
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            xCord = tileNum % Constants.NUM_TILES;
+            yCord = tileNum / Constants.NUM_TILES;
+            for ( int i = 0; i < Constants.NUM_TILES; i++ ) {
+                this.notes[i][xCord][yCord] = notes[i][tileNum] == 1;
             }
-            tiles[xCord][yCord].setValueToFirstNote();
-            didNothing = false;
         }
-        if ( didNothing ) {
-            sieveStatus = SieveStatus.SOLVED;
+    }
+
+    public char[][] getNotes() {
+        int xCord;
+        int yCord;
+        char[][] notes = new char[Constants.NUM_TILES][Constants.TOTAL_TILES];
+        for ( int tileNum = 0; tileNum < Constants.TOTAL_TILES; tileNum++ ) {
+            xCord = tileNum % Constants.NUM_TILES;
+            yCord = tileNum / Constants.NUM_TILES;
+            for ( int i = 0; i < Constants.NUM_TILES; i++ ) {
+                if ( this.notes[i][xCord][yCord] ) {
+                    notes[i][tileNum] = 1;
+                }
+                else {
+                    notes[i][tileNum] = 0;
+                }
+            }
         }
+        return notes;
     }
 }

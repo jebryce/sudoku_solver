@@ -64,6 +64,10 @@ public class Tile implements Cloneable {
         }
     }
 
+    public boolean[] getNotes() {
+        return notes;
+    }
+
     public int getValue() {
         return value;
     }
@@ -171,30 +175,6 @@ public class Tile implements Cloneable {
             return true;
         }
         return false;
-    }
-
-    public void setPossibleNotes() {
-        Arrays.fill( notes, true );
-        numNotes = Constants.NUM_TILES;
-        for ( Tile visibleTile : visibleTiles ) {
-            if ( visibleTile == null ) {
-                return;
-            }
-            unsetNote( visibleTile.getValue() );
-        }
-    }
-
-    public int getNumNotes() {
-        return numNotes;
-    }
-
-    public void setValueToFirstNote() {
-        for ( int i = 1; i <= Constants.NUM_TILES; i++ ) {
-            if ( notes[i - 1] ) {
-                setValue( i );
-                return;
-            }
-        }
     }
 
     protected void setVisibleDuplicates() {
