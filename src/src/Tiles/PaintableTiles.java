@@ -20,7 +20,7 @@ public class PaintableTiles extends Tiles {
     public void update() {
         int xCord = mouseHandler.xPos / Constants.TILE_SIZE;
         int yCord = mouseHandler.yPos / Constants.TILE_SIZE;
-        PaintableTile currentTile = getTiles()[xCord][yCord];
+        Tile currentTile = getTiles()[xCord][yCord];
         for( int i = 0; i < Constants.NUM_VALUES; i++ ) {
             if ( keyHandler.numbersPressed[i] ) {
                 if ( keyHandler.isNoteModePressed() ) {
